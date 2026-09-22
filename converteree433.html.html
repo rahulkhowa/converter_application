@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EE-433 · Converter Applications — Learning Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6f3ea;
+  --paper-2:#efe9da;
+  --grid:#e1d9c4;
+  --ink:#211d17;
+  --ink-soft:#57503f;
+  --muted:#8a8170;
+  --panel:#171310;
+  --panel-2:#221c16;
+  --panel-line:#3a3226;
+  --copper:#b0602a;
+  --copper-light:#d98a4f;
+  --copper-dim:#8a4a22;
+  --teal:#2f6f68;
+  --teal-light:#4f938a;
+  --line:#cdc2a4;
+  --card:#fffdf7;
+  --card-line:#e3d9bf;
+  --danger:#9c3b2e;
+  --good:#3a6b3f;
+  --shadow: 0 1px 0 rgba(33,29,23,.06);
+}
+:root:not([data-theme="light"]){
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141210;
+    --paper-2:#191512;
+    --grid:#2a2420;
+    --ink:#efe8d8;
+    --ink-soft:#c9bfa9;
+    --muted:#8f8570;
+    --panel:#0c0a08;
+    --panel-2:#151009;
+    --panel-line:#3a3226;
+    --copper:#e08c4e;
+    --copper-light:#f3ac70;
+    --copper-dim:#b0602a;
+    --teal:#5fa89e;
+    --teal-light:#7ec4b9;
+    --line:#3c3527;
+    --card:#1b1712;
+    --card-line:#3a3226;
+    --danger:#d97e6e;
+    --good:#7fb783;
+    --shadow: 0 1px 0 rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141210; --paper-2:#191512; --grid:#2a2420; --ink:#efe8d8; --ink-soft:#c9bfa9;
+  --muted:#8f8570; --panel:#0c0a08; --panel-2:#151009; --panel-line:#3a3226;
+  --copper:#e08c4e; --copper-light:#f3ac70; --copper-dim:#b0602a; --teal:#5fa89e; --teal-light:#7ec4b9;
+  --line:#3c3527; --card:#1b1712; --card-line:#3a3226; --danger:#d97e6e; --good:#7fb783;
+  --shadow: 0 1px 0 rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top: calc(env(safe-area-inset-top,0px) + 14px); scroll-behavior:smooth;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:
+    linear-gradient(var(--paper),var(--paper)),
+    repeating-linear-gradient(0deg, transparent, transparent 27px, var(--grid) 28px),
+    repeating-linear-gradient(90deg, transparent, transparent 27px, var(--grid) 28px);
+  background-blend-mode:normal;
+  color:var(--ink);
+  font-family:"IBM Plex Sans", system-ui, sans-serif;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--copper); color:#fff;}
+a{color:var(--copper-dim);}
+:root[data-theme="dark"] a, @media (prefers-color-scheme:dark){ a{color:var(--copper-light);} }
+
+/* ---------- Layout shell ---------- */
+.shell{display:flex; min-height:100%;}
+.side{
+  width:290px; flex:0 0 290px; background:var(--panel);
+  color:#e9dfc9; position:sticky; top:0; align-self:flex-start;
+  height:100vh; overflow-y:auto; border-right:1px solid var(--panel-line);
+  padding: calc(22px + env(safe-area-inset-top,0px)) 0 28px;
+}
+.side::-webkit-scrollbar{width:8px;}
+.side::-webkit-scrollbar-thumb{background:var(--panel-line); border-radius:4px;}
+.brand{padding:0 22px 18px; border-bottom:1px solid var(--panel-line); margin-bottom:14px;}
+.brand .code{font-family:"IBM Plex Mono",monospace; color:var(--copper-light); font-size:13px; letter-spacing:.06em;}
+.brand h1{font-size:19px; line-height:1.25; margin:6px 0 4px; font-weight:600; color:#f6efe0;}
+.brand .sub{font-size:12.5px; color:#a89a7e;}
+nav.toc{padding:6px 12px;}
+.toc .grp-label{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em; color:#8b7c5c; padding:14px 10px 6px;}
+.toc a{
+  display:block; padding:6px 10px; border-radius:5px; color:#cabf9f; text-decoration:none;
+  font-size:13.3px; line-height:1.4; border-left:2px solid transparent;
+}
+.toc a span.n{color:var(--copper-light); font-family:"IBM Plex Mono",monospace; font-size:11.5px; margin-right:7px;}
+.toc a:hover{background:var(--panel-2); color:#f6efe0; border-left-color:var(--copper);}
+
+.main{flex:1; min-width:0;}
+.hero{
+  background:
+    radial-gradient(900px 420px at 82% -10%, rgba(176,96,42,.22), transparent 60%),
+    linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  color:#f3ecdd; padding: 64px 48px 54px; position:relative; overflow:hidden;
+  border-bottom:1px solid var(--panel-line);
+}
+.hero .kicker{font-family:"IBM Plex Mono",monospace; color:var(--copper-light); font-size:13px; letter-spacing:.07em;}
+.hero h1{font-size:clamp(32px,4.6vw,54px); margin:14px 0 10px; font-weight:700; letter-spacing:-.01em; max-width:15ch;}
+.hero p.lede{max-width:62ch; color:#c8bd9f; font-size:16.5px; line-height:1.65;}
+.trace{position:absolute; right:-40px; top:20px; width:420px; max-width:44vw; opacity:.9;}
+.hero-meta{display:flex; gap:28px; margin-top:30px; flex-wrap:wrap;}
+.hero-meta .m{font-family:"IBM Plex Mono",monospace; font-size:12px; color:#a89a7e;}
+.hero-meta .m b{display:block; color:#f0e6cf; font-size:16px; font-weight:600; font-family:"IBM Plex Sans",sans-serif;}
+
+.content{padding: 8px 48px 90px; max-width:920px;}
+.module{padding-top:46px; scroll-margin-top:20px;}
+.module:first-of-type{padding-top:36px;}
+.mheader{display:flex; align-items:baseline; gap:14px; border-bottom:2px solid var(--ink); padding-bottom:10px; margin-bottom:22px;}
+.mheader .mnum{font-family:"IBM Plex Mono",monospace; color:var(--copper); font-size:15px; font-weight:600;}
+.mheader h2{font-size:25px; margin:0; font-weight:700;}
+.mheader .mtag{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted); border:1px solid var(--card-line); padding:3px 8px; border-radius:20px;}
+
+h3.sub{font-size:18px; margin:30px 0 10px; font-weight:600; color:var(--ink);}
+h4.sub2{font-size:15px; margin:20px 0 8px; font-weight:600; color:var(--copper-dim);}
+p{line-height:1.68; color:var(--ink-soft); font-size:15.3px;}
+strong{color:var(--ink); font-weight:600;}
+ul,ol{line-height:1.68; color:var(--ink-soft); font-size:15.3px; padding-left:22px;}
+li{margin-bottom:5px;}
+li::marker{color:var(--copper);}
+
+.card{
+  background:var(--card); border:1px solid var(--card-line); border-radius:3px;
+  padding:18px 20px; margin:16px 0; box-shadow:var(--shadow);
+}
+.note{border-left:3px solid var(--teal); background:color-mix(in srgb, var(--teal) 7%, var(--card));}
+.warn{border-left:3px solid var(--danger); background:color-mix(in srgb, var(--danger) 7%, var(--card));}
+.card .lbl{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.07em; color:var(--muted); text-transform:uppercase; margin-bottom:6px;}
+.note .lbl{color:var(--teal);}
+.warn .lbl{color:var(--danger);}
+
+.eqbox{
+  border:1.5px solid var(--ink); border-radius:2px; background:var(--card);
+  padding:16px 22px; margin:18px 0; text-align:center;
+}
+.eqbox .result{font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:600; color:var(--copper-dim);}
+.eqbox .tag{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--muted); margin-top:6px; letter-spacing:.05em;}
+
+.deriv{
+  font-family:"IBM Plex Mono",monospace; font-size:13.6px; line-height:2.05; color:var(--ink-soft);
+  background:var(--paper-2); border:1px dashed var(--card-line); border-radius:3px; padding:14px 18px; margin:14px 0; overflow-x:auto;
+}
+.deriv b{color:var(--ink);}
+
+.frac{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 3px; line-height:1.15;}
+.frac .num{border-bottom:1.4px solid currentColor; padding:0 4px 1px;}
+.frac .den{padding:1px 4px 0;}
+
+table.data{width:100%; border-collapse:collapse; margin:16px 0; font-size:14px;}
+table.data caption{text-align:left; font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted); margin-bottom:6px; letter-spacing:.04em;}
+table.data th{background:var(--panel); color:#e9dfc9; text-align:left; padding:9px 12px; font-weight:600; font-size:12.5px;}
+table.data td{padding:9px 12px; border-bottom:1px solid var(--card-line); color:var(--ink-soft);}
+table.data tr:nth-child(even) td{background:var(--paper-2);}
+table.data td.ok{color:var(--good); font-weight:600;}
+table.data td.no{color:var(--danger); font-weight:600;}
+
+.tag{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.04em; padding:2px 9px; border-radius:20px; border:1px solid currentColor; margin:0 5px 5px 0;}
+.tag.ccm{color:var(--teal);}
+.tag.dcm{color:var(--copper-dim);}
+.tag.iso{color:#6b5b9e;}
+.tag.nl{color:var(--danger);}
+.tag.lin{color:var(--good);}
+
+.fig{margin:22px 0; border:1px solid var(--card-line); border-radius:3px; background:var(--card); overflow:hidden;}
+.fig .stage{padding:18px; display:flex; justify-content:center; background:
+  linear-gradient(var(--card),var(--card)); }
+.fig figcaption{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--muted); border-top:1px solid var(--card-line); padding:9px 16px; background:var(--paper-2);}
+.fig figcaption b{color:var(--copper-dim);}
+svg{display:block; max-width:100%; height:auto;}
+.sv-ink{stroke:var(--ink); fill:none;}
+.sv-cu{stroke:var(--copper); fill:none;}
+.sv-teal{stroke:var(--teal); fill:none;}
+.sv-fill{fill:var(--ink);}
+.sv-txt{font-family:"IBM Plex Mono",monospace; fill:var(--ink-soft); font-size:11px;}
+.sv-txt2{font-family:"IBM Plex Mono",monospace; fill:var(--copper-dim); font-size:11px; font-weight:600;}
+
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:760px){.grid2{grid-template-columns:1fr;}}
+
+.steps{counter-reset:st; list-style:none; padding-left:0;}
+.steps li{counter-increment:st; position:relative; padding-left:38px; margin-bottom:14px;}
+.steps li::before{content:counter(st); position:absolute; left:0; top:0; width:26px; height:26px; border-radius:50%; background:var(--panel); color:var(--copper-light); font-family:"IBM Plex Mono",monospace; font-size:12.5px; display:flex; align-items:center; justify-content:center; font-weight:600;}
+
+.divider{height:1px; background:repeating-linear-gradient(90deg, var(--card-line) 0 6px, transparent 6px 12px); margin:40px 0;}
+
+.topbtn{position:fixed; right:22px; bottom:22px; width:40px; height:40px; border-radius:50%; background:var(--panel); color:var(--copper-light); display:flex; align-items:center; justify-content:center; text-decoration:none; border:1px solid var(--panel-line); font-size:16px; box-shadow:0 4px 14px rgba(0,0,0,.25); z-index:50;}
+
+.assign{border-left:3px solid var(--copper); background:color-mix(in srgb, var(--copper) 8%, var(--card));}
+
+@media (max-width:900px){
+  .shell{flex-direction:column;}
+  .side{position:relative; width:100%; height:auto; max-height:68vh;}
+  .hero{padding:40px 22px 34px;}
+  .content{padding:8px 20px 70px;}
+  .trace{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<aside class="side">
+  <div class="brand">
+    <div class="code">EE&#8209;433</div>
+    <h1>Converter Applications</h1>
+    <div class="sub">Complete learning module &middot; compiled lecture notes</div>
+  </div>
+  <nav class="toc">
+    <div class="grp-label">Orientation</div>
+    <a href="#m0"><span class="n">00</span>Course Overview</a>
+    <a href="#m1"><span class="n">01</span>Fundamentals of SMPS</a>
+
+    <div class="grp-label">Non-isolated converters</div>
+    <a href="#m2"><span class="n">02</span>Steady-State Analysis (CCM)</a>
+    <a href="#m3"><span class="n">03</span>Discontinuous Conduction (DCM)</a>
+
+    <div class="grp-label">Isolated converters</div>
+    <a href="#m4"><span class="n">04</span>Isolated Topologies</a>
+
+    <div class="grp-label">Control &amp; dynamics</div>
+    <a href="#m5"><span class="n">05</span>Dynamic (Small-Signal) Modelling</a>
+    <a href="#m6"><span class="n">06</span>Compensator Design</a>
+    <a href="#m7"><span class="n">07</span>Frequency Response &amp; Stability</a>
+    <a href="#m8"><span class="n">08</span>Voltage vs Current Mode Control</a>
+
+    <div class="grp-label">Power quality</div>
+    <a href="#m9"><span class="n">09</span>Power Quality Fundamentals</a>
+    <a href="#m10"><span class="n">10</span>THD, Power Factor &amp; PFC</a>
+
+    <div class="grp-label">Reference</div>
+    <a href="#m11"><span class="n">&#8734;</span>Syllabus Map</a>
+  </nav>
+</aside>
+
+<main class="main">
+  <header class="hero">
+    <svg class="trace" viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 210 L60 210 L60 150 L120 150 L120 90 L180 90 L180 190 L230 190 L230 40 L290 40 L290 130 L340 130 L340 70 L420 70" class="sv-cu" stroke-width="2.5" opacity="0.85"/>
+      <circle cx="60" cy="210" r="3.5" fill="var(--copper-light)" stroke="none"/>
+      <circle cx="180" cy="90" r="3.5" fill="var(--copper-light)" stroke="none"/>
+      <circle cx="290" cy="40" r="3.5" fill="var(--copper-light)" stroke="none"/>
+      <circle cx="420" cy="70" r="4" fill="var(--copper-light)" stroke="none"/>
+      <path d="M0 235 Q40 220 80 235 T160 235 T240 235 T320 235 T420 235" class="sv-ink" stroke-width="1" opacity="0.25"/>
+    </svg>
+    <div class="kicker">LEARNING MODULE &middot; SMPS &amp; APPLICATIONS</div>
+    <h1>Converter Applications, cover to cover</h1>
+    <p class="lede">Every derivation, waveform and design rule from your handwritten notes &mdash; SMPS fundamentals, buck/boost/buck&#8209;boost/&#263;uk converters, isolated topologies, small&#8209;signal control, and power quality &mdash; rebuilt as one clear, navigable reference.</p>
+    <div class="hero-meta">
+      <div class="m"><b>4</b>Units of syllabus</div>
+      <div class="m"><b>11</b>Modules below</div>
+      <div class="m"><b>CCM &amp; DCM</b>Both conduction modes</div>
+      <div class="m"><b>Isolated + Non&#8209;isolated</b>Full topology set</div>
+    </div>
+  </header>
+
+  <div class="content">
+
+  <!-- ================= MODULE 0 ================= -->
+  <section class="module" id="m0">
+    <div class="mheader"><span class="mnum">00</span><h2>Course Overview</h2><span class="mtag">orientation</span></div>
+
+    <p>EE&#8209;433 studies how power electronics converters are <em>applied</em> &mdash; not just how a single converter works, but how it is controlled, protected, and connected to sources and loads in real systems.</p>
+
+    <h3 class="sub">Syllabus, in four units</h3>
+    <table class="data">
+      <tr><th>Unit</th><th>Topic</th><th>What it covers</th></tr>
+      <tr><td>1</td><td>SMPS and its control</td><td>CCM/DCM steady-state analysis, dynamic modelling, feedback loop design</td></tr>
+      <tr><td>2</td><td>Power quality improvement &amp; UPS</td><td>Harmonics, input power factor, UPS &amp; power banks</td></tr>
+      <tr><td>3</td><td>Converter interfaces for non-conventional energy</td><td>Processing power from renewable sources into usable form</td></tr>
+      <tr><td>4</td><td>Power converters for solid-state transformers (SST)</td><td>&mdash;</td></tr>
+    </table>
+    <p><strong>Marks:</strong> Mid-sem 30% &middot; Continuous assessment 20% &middot; End-sem 50%.</p>
+
+    <h3 class="sub">Where power electronics sits</h3>
+    <p>Electronics splits by power level: <strong>analog</strong> (0&ndash;15&nbsp;V), <strong>digital</strong> (logic 0&ndash;5&nbsp;V), and <strong>power</strong> (kA&ndash;kW). Power electronics converters are classified by what they convert between:</p>
+
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 640 210" width="640">
+          <rect x="255" y="10" width="130" height="42" rx="3" class="sv-ink" stroke-width="1.6"/>
+          <text x="320" y="35" text-anchor="middle" class="sv-txt2">Power Electronics</text>
+          <line x1="320" y1="52" x2="320" y2="70" class="sv-ink" stroke-width="1.4"/>
+          <line x1="70" y1="70" x2="570" y2="70" class="sv-ink" stroke-width="1.4"/>
+          <line x1="70" y1="70" x2="70" y2="90" class="sv-ink" stroke-width="1.4"/>
+          <line x1="240" y1="70" x2="240" y2="90" class="sv-ink" stroke-width="1.4"/>
+          <line x1="400" y1="70" x2="400" y2="90" class="sv-ink" stroke-width="1.4"/>
+          <line x1="570" y1="70" x2="570" y2="90" class="sv-ink" stroke-width="1.4"/>
+          <g font-family="IBM Plex Mono, monospace" font-size="12.5">
+            <rect x="15" y="90" width="110" height="46" rx="3" class="sv-cu" stroke-width="1.6"/>
+            <text x="70" y="112" text-anchor="middle" class="sv-txt2">AC&#8209;DC</text>
+            <text x="70" y="127" text-anchor="middle" class="sv-txt">Rectifier</text>
+            <rect x="185" y="90" width="110" height="46" rx="3" class="sv-cu" stroke-width="1.6"/>
+            <text x="240" y="112" text-anchor="middle" class="sv-txt2">DC&#8209;DC</text>
+            <text x="240" y="127" text-anchor="middle" class="sv-txt">Converter</text>
+            <rect x="345" y="90" width="110" height="46" rx="3" class="sv-cu" stroke-width="1.6"/>
+            <text x="400" y="112" text-anchor="middle" class="sv-txt2">DC&#8209;AC</text>
+            <text x="400" y="127" text-anchor="middle" class="sv-txt">Inverter</text>
+            <rect x="515" y="90" width="110" height="46" rx="3" class="sv-cu" stroke-width="1.6"/>
+            <text x="570" y="112" text-anchor="middle" class="sv-txt2">AC&#8209;AC</text>
+            <text x="570" y="127" text-anchor="middle" class="sv-txt">Voltage Regulator</text>
+          </g>
+          <line x1="240" y1="136" x2="240" y2="150" class="sv-ink" stroke-width="1.4"/>
+          <line x1="185" y1="150" x2="295" y2="150" class="sv-ink" stroke-width="1.4"/>
+          <line x1="185" y1="150" x2="185" y2="165" class="sv-ink" stroke-width="1.4"/>
+          <line x1="295" y1="150" x2="295" y2="165" class="sv-ink" stroke-width="1.4"/>
+          <rect x="120" y="165" width="130" height="34" rx="3" class="sv-teal" stroke-width="1.6"/>
+          <text x="185" y="186" text-anchor="middle" class="sv-txt">Isolated (galvanic)</text>
+          <rect x="250" y="165" width="130" height="34" rx="3" class="sv-teal" stroke-width="1.6"/>
+          <text x="315" y="182" text-anchor="middle" class="sv-txt">Non&#8209;isolated</text>
+          <text x="315" y="195" text-anchor="middle" class="sv-txt">Buck &middot; Boost</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig 0.1</b> &mdash; Power electronics converter classification (difference in power level from analog/digital electronics).</figcaption>
+    </figure>
+
+    <h3 class="sub">The Power Electronics Interface (PEI)</h3>
+    <p>A PEI supplies power based on load requirements, accepting AC or DC input and delivering AC (variable or fixed) or DC (fixed or variable/high) output, governed by a control block. A power electronics converter has three jobs:</p>
+    <div class="eqbox"><span class="result">Process &nbsp;&middot;&nbsp; Regulate &nbsp;&middot;&nbsp; Offer stability</span><span class="tag">the three functions of every PE interface</span></div>
+    <ol>
+      <li><strong>Process</strong> &mdash; supply power based on load requirements.</li>
+      <li><strong>Regulate</strong> &mdash; hold the output power/voltage steady.</li>
+      <li><strong>Stabilise</strong> &mdash; offer stability to the system to a certain extent.</li>
+    </ol>
+
+    <h3 class="sub">SMPS: two operating modes</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Continuous Conduction Mode</div>
+        <p style="margin:0">Inductor current never reaches zero within a switching cycle. Steady-state analysis of all fundamental DC-DC converters is carried out here first.</p>
+      </div>
+      <div class="card">
+        <div class="lbl">Discontinuous Conduction Mode</div>
+        <p style="margin:0">Inductor current starts and ends each cycle at zero. The converter begins behaving like a <em>linear</em> converter (unlike CCM) &mdash; this helps control transients and improves stability (faster restoration of the steady-state operating point).</p>
+      </div>
+    </div>
+    <p>Both modes are analysed for two categories: <span class="tag nl">non-isolated</span> and <span class="tag iso">isolated (galvanic)</span>. Dynamic analysis on top of this helps design the controller logic and feedback loops.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 1 ================= -->
+  <section class="module" id="m1">
+    <div class="mheader"><span class="mnum">01</span><h2>Fundamentals of SMPS</h2><span class="mtag">Unit 1</span></div>
+
+    <h3 class="sub">Linear supply vs. switch-mode supply</h3>
+    <table class="data">
+      <tr><th></th><th>Linear regulator</th><th>SMPS</th></tr>
+      <tr><td>Frequency</td><td>Low &rarr; big, bulky equipment</td><td>High &rarr; smaller components, no heat sinks</td></tr>
+      <tr><td>Function</td><td>Can only buck the voltage</td><td>Can buck <em>or</em> boost the voltage</td></tr>
+      <tr><td>Losses</td><td>High (dissipative element)</td><td>Ideally zero &mdash; ON: V&nbsp;=&nbsp;0, OFF: I&nbsp;=&nbsp;0, so P&nbsp;=&nbsp;0 (no resistor, only switching)</td></tr>
+      <tr><td>Application</td><td>&mdash;</td><td>High power applications, presence of feedback loop</td></tr>
+      <tr><td>Disadvantage</td><td>&mdash;</td><td>High EMI &rarr; requires filters</td></tr>
+    </table>
+    <p><em>Note:</em> MOSFETs switch at higher frequency than IGBTs, but IGBTs carry higher power ratings.</p>
+
+    <h3 class="sub">Characteristics of an ideal converter</h3>
+    <ol>
+      <li>Input &asymp; output; efficiency &eta; &asymp; 100%</li>
+      <li>Output voltage should follow the reference input</li>
+      <li>All converters must behave like a voltage source</li>
+      <li>Should have minimum distortion</li>
+      <li>Should have good dynamic performance</li>
+    </ol>
+
+    <h3 class="sub">Choices of power processor</h3>
+    <p>Four candidate "power processors" are checked against the five ideal-converter conditions above.</p>
+    <table class="data">
+      <caption>&#10003; satisfies the condition &middot; &#10007; fails it</caption>
+      <tr><th>Processor</th><th>1. &eta;&asymp;100%</th><th>2. Tracks ref.</th><th>3. Voltage source</th><th>4. Low distortion</th><th>5. Good dynamics</th><th>Verdict</th></tr>
+      <tr><td>A &middot; Resistive divider</td><td class="no">&#10007;</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td class="ok">&#10003; (no switching)</td><td class="no">&#10007; (R is a damper)</td><td>Fails modern requirements</td></tr>
+      <tr><td>B &middot; Linear regulator</td><td class="no">&#10007;</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td class="no">&#10007;</td><td>Used only up to &asymp;1&nbsp;A</td></tr>
+      <tr><td>C &middot; Charge pump</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td>All satisfied, but &lt;500&nbsp;mA &mdash; used for IC applications</td></tr>
+      <tr><td>D &middot; SMPS</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td class="ok">&#10003;</td><td>Supplies 10s&ndash;100s of amps &mdash; the modern standard</td></tr>
+    </table>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">B &middot; Linear Regulator</div>
+        <p style="margin:0">A MOSFET is operated in its <em>saturation</em> region so its internal (channel) resistance adjusts continuously, making V<sub>o</sub> track V<sub>ref</sub>. Because the pass device dissipates the difference as heat, dynamic performance and efficiency are both poor.</p>
+        <div class="eqbox"><span class="result">V<sub>o</sub> = V<sub>ref</sub><span class="frac"><span class="num">R&#8321;+R&#8322;</span><span class="den">R&#8322;</span></span></span></div>
+      </div>
+      <div class="card">
+        <div class="lbl">C &middot; Charge Pump</div>
+        <p style="margin:0">Also called a voltage-doubler circuit. C<sub>f</sub> is the flying/floating capacitor, C<sub>2</sub> the reservoir capacitor. Two intervals alternate: interval&nbsp;1 charges C<sub>f</sub> to V<sub>in</sub>; interval&nbsp;2 puts V<sub>in</sub>+C<sub>f</sub> in series to charge V<sub>o</sub> to 2V<sub>in</sub>.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">D &middot; SMPS: the switch-then-filter idea</h3>
+    <p>An SPDT switch alternates the node V<sub>x</sub> between V<sub>in</sub> and 0; a low-pass filter then extracts the DC average with minimum distortion.</p>
+    <div class="deriv">
+&lang;v<sub>x</sub>&rang; = &lang;v<sub>o</sub>&rang; = (1/T<sub>s</sub>) &int;<sub>0</sub><sup>T<sub>s</sub></sup> v<sub>x</sub> dt<br>
+&nbsp;&nbsp;&nbsp; = (1/T<sub>s</sub>) [ &int;<sub>0</sub><sup>DT<sub>s</sub></sup> v<sub>in</sub> dt + &int;<sub>DT<sub>s</sub></sub><sup>T<sub>s</sub></sup> 0 dt ]<br>
+&nbsp;&nbsp;&nbsp; = <b>D&middot;V<sub>in</sub></b>
+    </div>
+    <div class="eqbox"><span class="result">V<sub>o</sub> = D&middot;V<sub>in</sub> &nbsp;&nbsp;&nbsp; D = T<sub>on</sub>/T</span></div>
+    <p>Replacing the second SPDT position with a diode (S&#8322; &rarr; diode) gives the practical <strong>buck converter</strong> &mdash; semiconductor devices give very low switching loss and negligible on-resistance, so this configuration satisfies all five ideal-converter conditions.</p>
+
+    <h3 class="sub">Components used in power electronics</h3>
+    <table class="data">
+      <tr><th>Category</th><th>Examples</th></tr>
+      <tr><td>Active elements</td><td>Capacitor (energy-storage, electrostatic), current source</td></tr>
+      <tr><td>Passive elements</td><td>Inductor (electromagnetic), capacitor</td></tr>
+      <tr><td>Switches</td><td>MOSFET, diode</td></tr>
+      <tr><td>Load</td><td>Resistive</td></tr>
+    </table>
+    <p>If a switch operates in its <em>linear</em> region there is no hard current limit &mdash; unlike the <em>saturation</em> (fully-on) region used for switching regulation (SR), where the device sits at either extreme of its I<sub>d</sub>&ndash;V<sub>d</sub> curve.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 2 ================= -->
+  <section class="module" id="m2">
+    <div class="mheader"><span class="mnum">02</span><h2>Steady-State Analysis &mdash; CCM</h2><span class="mtag">non-isolated</span></div>
+
+    <p>Every DC-DC converter is analysed with two fundamental principles. The <strong>order</strong> of a converter equals its number of passive (energy-storing) elements.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">1 &middot; Inductor volt-second balance</div>
+        <p>v<sub>L</sub> = L&middot;di<sub>L</sub>/dt. If &lang;di<sub>L</sub>&rang;<sub>T<sub>s</sub></sub> &ne; 0, the inductor saturates &mdash; H &prop; i<sub>L</sub> runs away, and a saturated inductor draws as much current as it can while the source keeps supplying it ("inductor boom"). So in steady state:</p>
+        <div class="eqbox"><span class="result">V<sub>L</sub>&middot;D + V<sub>L</sub>&prime;&middot;D&prime; = 0</span></div>
+      </div>
+      <div class="card">
+        <div class="lbl">2 &middot; Capacitor charge-second balance</div>
+        <p>i<sub>c</sub> = C&middot;dv<sub>c</sub>/dt. If &lang;dv<sub>c</sub>&rang;<sub>T<sub>s</sub></sub> &ne; 0, the capacitor overcharges indefinitely ("boom"). So in steady state:</p>
+        <div class="eqbox"><span class="result">i<sub>c</sub>&middot;D + i<sub>c</sub>&prime;&middot;D&prime; = 0</span></div>
+      </div>
+    </div>
+
+    <h3 class="sub">Buck converter</h3>
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 460 190" width="460">
+          <line x1="30" y1="150" x2="30" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <line x1="26" y1="150" x2="34" y2="150" class="sv-ink" stroke-width="1.6"/>
+          <line x1="24" y1="146" x2="36" y2="146" class="sv-ink" stroke-width="1.6"/>
+          <text x="12" y="98" class="sv-txt">V<tspan baseline-shift="sub">in</tspan></text>
+          <line x1="30" y1="40" x2="70" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <line x1="70" y1="40" x2="70" y2="28" class="sv-cu" stroke-width="1.8"/>
+          <circle cx="70" cy="45" r="3.4" class="sv-ink" stroke-width="1.4"/>
+          <text x="80" y="24" class="sv-txt2">S</text>
+          <line x1="72" y1="42" x2="95" y2="24" class="sv-cu" stroke-width="1.8"/>
+          <line x1="70" y1="40" x2="110" y2="40" class="sv-ink" stroke-width="1.6" stroke-dasharray="2 3" opacity=".5"/>
+          <line x1="110" y1="40" x2="150" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <path d="M150 40 q6 -12 12 0 q6 -12 12 0 q6 -12 12 0 q6 -12 12 0" class="sv-cu" stroke-width="1.8"/>
+          <text x="163" y="20" text-anchor="middle" class="sv-txt2">L</text>
+          <line x1="198" y1="40" x2="360" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <line x1="120" y1="40" x2="120" y2="150" class="sv-ink" stroke-width="1.6"/>
+          <path d="M110 55 L130 55 L110 65 L130 65" class="sv-ink" stroke-width="1.6" fill="none"/>
+          <text x="102" y="60" text-anchor="end" class="sv-txt">D<tspan baseline-shift="sub">i</tspan></text>
+          <line x1="120" y1="65" x2="120" y2="150" class="sv-ink" stroke-width="1.6"/>
+          <line x1="255" y1="40" x2="255" y2="150" class="sv-ink" stroke-width="1.6"/>
+          <line x1="246" y1="60" x2="264" y2="60" class="sv-ink" stroke-width="1.6"/>
+          <line x1="246" y1="66" x2="264" y2="66" class="sv-ink" stroke-width="1.6"/>
+          <text x="255" y="90" text-anchor="middle" class="sv-txt">C</text>
+          <line x1="360" y1="40" x2="360" y2="150" class="sv-ink" stroke-width="1.6"/>
+          <path d="M352 60 l16 0 M355 66 l10 0 M357 72 l6 0" class="sv-ink" stroke-width="1.6"/>
+          <text x="378" y="90" text-anchor="middle" class="sv-txt">R</text>
+          <text x="380" y="45" class="sv-txt2">+V<tspan baseline-shift="sub">o</tspan>&#8722;</text>
+          <line x1="30" y1="150" x2="360" y2="150" class="sv-ink" stroke-width="1.6"/>
+          <line x1="28" y1="154" x2="40" y2="154" class="sv-ink" stroke-width="1.2"/>
+          <line x1="31" y1="158" x2="37" y2="158" class="sv-ink" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <figcaption><b>Fig 2.1</b> &mdash; Buck converter (non-isolated, step-down).</figcaption>
+    </figure>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Case 1 &middot; S on, D off (DT<sub>s</sub>)</div>
+        <div class="deriv">v<sub>L</sub> = V<sub>in</sub> &#8722; V<sub>o</sub><br>i<sub>c</sub> = i<sub>L</sub> &#8722; i<sub>o</sub></div>
+      </div>
+      <div class="card">
+        <div class="lbl">Case 2 &middot; S off, D on (D&prime;T<sub>s</sub>)</div>
+        <div class="deriv">v<sub>L</sub> = &#8722;V<sub>o</sub><br>i<sub>c</sub> = i<sub>L</sub> &#8722; i<sub>o</sub></div>
+      </div>
+    </div>
+
+    <p>Applying volt-second balance:</p>
+    <div class="deriv">(V<sub>in</sub> &#8722; V<sub>o</sub>)&middot;D&middot;T<sub>s</sub> + (&#8722;V<sub>o</sub>)&middot;D&prime;&middot;T<sub>s</sub> = 0<br>&rArr; D&middot;V<sub>in</sub> &#8722; (D+D&prime;)V<sub>o</sub> = 0</div>
+    <div class="eqbox"><span class="result">V<sub>o</sub> = D&middot;V<sub>in</sub></span><span class="tag">voltage gain A<sub>v</sub> = V<sub>o</sub>/V<sub>in</sub> = D &mdash; a straight line, so buck is called the <b>linear converter</b></span></div>
+    <p>Charge-second balance gives (i<sub>L</sub>&#8722;i<sub>o</sub>)(D+D&prime;) = 0 &rArr; <strong>I<sub>L</sub> = I<sub>o</sub></strong>. Average current through S is D&middot;I<sub>L</sub>, through the diode D&prime;&middot;I<sub>L</sub>.</p>
+
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 460 150" width="460">
+          <polyline points="20,60 20,40 130,40 130,60 240,60 240,40 350,40 350,60 440,60" class="sv-cu" stroke-width="1.8"/>
+          <text x="10" y="30" class="sv-txt2">V<tspan baseline-shift="sub">sw</tspan></text>
+          <polyline points="20,120 130,90 240,130 350,100 440,140" class="sv-ink" stroke-width="1.8"/>
+          <text x="10" y="98" class="sv-txt2">i<tspan baseline-shift="sub">L</tspan></text>
+          <line x1="20" y1="145" x2="440" y2="145" class="sv-ink" stroke-width="1"/>
+          <line x1="130" y1="65" x2="130" y2="145" class="sv-ink" stroke-width=".6" stroke-dasharray="2 3"/>
+          <text x="65" y="140" text-anchor="middle" class="sv-txt">DT<tspan baseline-shift="sub">s</tspan></text>
+          <text x="185" y="140" text-anchor="middle" class="sv-txt">D&prime;T<tspan baseline-shift="sub">s</tspan></text>
+        </svg>
+      </div>
+      <figcaption><b>Fig 2.2</b> &mdash; Buck switch-node voltage and inductor current ripple. Slope = (V<sub>in</sub>&#8722;V<sub>o</sub>)/L while S is on, &#8722;V<sub>o</sub>/L while the diode conducts.</figcaption>
+    </figure>
+
+    <div class="eqbox">
+      <span class="result">&Delta;i<sub>L</sub> = <span class="frac"><span class="num">V<sub>in</sub>&#8722;V<sub>o</sub></span><span class="den">L</span></span> &middot; D&middot;T<sub>s</sub>,&nbsp;&nbsp; <span class="frac"><span class="num">&Delta;V<sub>L</sub></span><span class="den">V<sub>c</sub></span></span> = <span class="frac"><span class="num">1&#8722;D</span><span class="den">8LCf<sup>2</sup></span></span></span>
+    </div>
+    <div class="card note">
+      <div class="lbl">Design note</div>
+      <p style="margin:0">Replacing the diode with an active switch gives a <strong>synchronous buck</strong> &mdash; a bidirectional topology allowing much higher current, since a MOSFET has lower on-resistance than the voltage drop across a diode (also reduces heat loss). Common in microprocessor power supplies.</p>
+    </div>
+
+    <h3 class="sub">Boost converter</h3>
+    <p>Duty ratio D now defines the fraction of the cycle the switch shorts the inductor to ground, forcing energy into it; when the switch opens, the diode routes that energy to the output.</p>
+    <div class="eqbox"><span class="result">A<sub>v</sub> = V<sub>o</sub>/V<sub>in</sub> = 1/(1&#8722;D)&nbsp;&nbsp;&nbsp; I<sub>L</sub> = I<sub>o</sub>/(1&#8722;D)</span><span class="tag nl">non-linear</span></div>
+    <p>As D &rarr; 1 the gain diverges &mdash; in practice, parasitic resistance in L and the switch makes the real curve fold over and V<sub>o</sub> actually <em>drops</em> at very high D, so boost duty ratio is restricted to about 0.1&ndash;0.8 in practice.</p>
+
+    <h3 class="sub">Buck-boost converter</h3>
+    <p>Take the buck and boost topologies and connect them in cascade (feeding one's output stage into the other's input stage). The two topologies each present a voltage-stiff node (a capacitor) in parallel &mdash; connecting two voltage-stiff elements directly has no circuit-physics meaning, so the redundant, non-switching capacitor is removed and the two inductors merge:</p>
+    <div class="deriv">L = L&#8321; + L&#8322; &nbsp;&nbsp;(since neither inductor's state changes across a switching instant &mdash; no impact on steady-state operation, so it's redundant and can be removed)</div>
+
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 400 170" width="400">
+          <line x1="30" y1="140" x2="30" y2="35" class="sv-ink" stroke-width="1.6"/>
+          <line x1="26" y1="140" x2="34" y2="140" class="sv-ink" stroke-width="1.6"/>
+          <text x="12" y="90" class="sv-txt">V<tspan baseline-shift="sub">in</tspan></text>
+          <line x1="30" y1="35" x2="90" y2="35" class="sv-ink" stroke-width="1.6"/>
+          <circle cx="90" cy="40" r="3.4" class="sv-ink" stroke-width="1.4"/>
+          <line x1="92" y1="37" x2="115" y2="20" class="sv-cu" stroke-width="1.8"/>
+          <text x="98" y="16" class="sv-txt2">S</text>
+          <line x1="30" y1="140" x2="330" y2="140" class="sv-ink" stroke-width="1.6"/>
+          <line x1="90" y1="35" x2="90" y2="140" class="sv-ink" stroke-width="1.6" opacity=".25"/>
+          <path d="M120 45 L140 45 L120 55 L140 55" class="sv-ink" stroke-width="1.6" fill="none" transform="rotate(180 130 50)"/>
+          <text x="130" y="80" text-anchor="middle" class="sv-txt">D<tspan baseline-shift="sub">i</tspan></text>
+          <line x1="90" y1="40" x2="130" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <line x1="130" y1="40" x2="130" y2="140" class="sv-ink" stroke-width="1.6"/>
+          <path d="M90 65 q6 12 12 0 q6 12 12 0 q6 12 12 0 q6 12 12 0" class="sv-cu" stroke-width="1.8" transform="translate(0,0)"/>
+          <text x="115" y="100" text-anchor="middle" class="sv-txt2">L</text>
+          <line x1="215" y1="40" x2="215" y2="140" class="sv-ink" stroke-width="1.6" opacity="0"/>
+          <line x1="255" y1="40" x2="255" y2="140" class="sv-ink" stroke-width="1.6"/>
+          <line x1="246" y1="70" x2="264" y2="70" class="sv-ink" stroke-width="1.6"/>
+          <line x1="246" y1="76" x2="264" y2="76" class="sv-ink" stroke-width="1.6"/>
+          <text x="255" y="100" text-anchor="middle" class="sv-txt">C</text>
+          <line x1="130" y1="40" x2="255" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <line x1="255" y1="40" x2="330" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <line x1="330" y1="40" x2="330" y2="140" class="sv-ink" stroke-width="1.6"/>
+          <path d="M322 62 l16 0 M325 68 l10 0 M327 74 l6 0" class="sv-ink" stroke-width="1.6"/>
+          <text x="350" y="100" text-anchor="middle" class="sv-txt">R</text>
+          <text x="345" y="35" class="sv-txt2">&#8722;V<tspan baseline-shift="sub">o</tspan>+</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig 2.3</b> &mdash; Buck-boost converter, essentially a cascaded buck+boost with redundant elements removed.</figcaption>
+    </figure>
+
+    <div class="deriv">
+T<sub>on</sub>: v<sub>L</sub> = V<sub>in</sub>,&nbsp; i<sub>o</sub> = &#8722;i<sub>c</sub><br>
+T<sub>off</sub>: v<sub>L</sub> = &#8722;V<sub>o</sub>,&nbsp; i<sub>L</sub> = i<sub>c</sub> + i<sub>o</sub><br>
+Volt-sec: V<sub>in</sub>&middot;D + (&#8722;V<sub>o</sub>)&middot;D&prime; = 0
+    </div>
+    <div class="eqbox">
+      <span class="result">V<sub>o</sub> = <span class="frac"><span class="num">&#8722;D</span><span class="den">1&#8722;D</span></span>V<sub>in</sub> &nbsp;&nbsp; I<sub>L</sub> = <span class="frac"><span class="num">I<sub>o</sub></span><span class="den">1&#8722;D</span></span> &nbsp;&nbsp; A<sub>v</sub> = <span class="frac"><span class="num">D</span><span class="den">1&#8722;D</span></span></span>
+      <span class="tag">output polarity is inverted (&#8722;ve sign handled by circuit orientation)</span>
+    </div>
+    <table class="data">
+      <tr><th>Duty ratio</th><th>Example</th><th>Behaviour</th></tr>
+      <tr><td>D &le; 0.5</td><td>D=0.4 &rarr; A<sub>v</sub>=2/3</td><td>Buck operation</td></tr>
+      <tr><td>D = 0.5</td><td>&mdash;</td><td>A<sub>v</sub>=1, V<sub>in</sub>=V<sub>o</sub></td></tr>
+      <tr><td>D &gt; 0.5</td><td>D=0.6 &rarr; A<sub>v</sub>=3/2</td><td>Boost operation</td></tr>
+    </table>
+    <div class="card assign">
+      <div class="lbl">From the notes &middot; take-home question</div>
+      <p style="margin:0">From a circuit-physics viewpoint, explain why the buck-boost converter gives buck operation for D&lt;50% and boost operation for D&gt;50%.</p>
+    </div>
+
+    <h3 class="sub">&#262;uk converter</h3>
+    <p>Replace the buck-boost's SPDT node with an SPST switch, add a transfer capacitor C&#8321; between the two inductors, and a diode &mdash; this is the <strong>&#262;uk converter</strong>: a 4th-order converter (two inductors, two capacitors) that keeps its <em>opposite</em> output polarity.</p>
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 430 160" width="430">
+          <line x1="25" y1="130" x2="25" y2="35" class="sv-ink" stroke-width="1.6"/>
+          <path d="M25 65 q6 12 12 0 q6 12 12 0 q6 12 12 0" class="sv-cu" stroke-width="1.8"/>
+          <text x="45" y="95" text-anchor="middle" class="sv-txt2">L&#8321;</text>
+          <line x1="61" y1="40" x2="120" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <line x1="120" y1="40" x2="120" y2="130" class="sv-ink" stroke-width="1.6"/>
+          <circle cx="120" cy="80" r="3.4" class="sv-ink" stroke-width="1.4"/>
+          <text x="128" y="80" class="sv-txt2">S</text>
+          <line x1="120" y1="40" x2="185" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <line x1="176" y1="35" x2="194" y2="35" class="sv-ink" stroke-width="1.6"/>
+          <line x1="176" y1="45" x2="194" y2="45" class="sv-ink" stroke-width="1.6"/>
+          <text x="185" y="24" text-anchor="middle" class="sv-txt2">C&#8321;</text>
+          <line x1="185" y1="40" x2="250" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <path d="M250 40 q6 -12 12 0 q6 -12 12 0 q6 -12 12 0" class="sv-cu" stroke-width="1.8"/>
+          <text x="270" y="20" text-anchor="middle" class="sv-txt2">L&#8322;</text>
+          <line x1="286" y1="40" x2="345" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <path d="M242 55 L260 55 L242 65 L260 65" class="sv-ink" stroke-width="1.6" fill="none" transform="rotate(180 251 60)"/>
+          <line x1="251" y1="40" x2="251" y2="130" class="sv-ink" stroke-width="1.6"/>
+          <line x1="345" y1="40" x2="345" y2="130" class="sv-ink" stroke-width="1.6"/>
+          <line x1="336" y1="65" x2="354" y2="65" class="sv-ink" stroke-width="1.6"/>
+          <line x1="336" y1="71" x2="354" y2="71" class="sv-ink" stroke-width="1.6"/>
+          <text x="345" y="100" text-anchor="middle" class="sv-txt">C&#8322;</text>
+          <line x1="345" y1="40" x2="400" y2="40" class="sv-ink" stroke-width="1.6"/>
+          <line x1="400" y1="40" x2="400" y2="130" class="sv-ink" stroke-width="1.6"/>
+          <path d="M392 65 l16 0 M395 71 l10 0 M397 77 l6 0" class="sv-ink" stroke-width="1.6"/>
+          <text x="418" y="100" text-anchor="middle" class="sv-txt">R</text>
+          <line x1="25" y1="130" x2="400" y2="130" class="sv-ink" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <figcaption><b>Fig 2.4</b> &mdash; &#262;uk converter (4th-order); C&#8321; transfers power between input and output sides in different switching intervals.</figcaption>
+    </figure>
+
+    <div class="deriv">
+<b>State 1</b> &mdash; S closed (DT<sub>s</sub>): &nbsp; v<sub>L1</sub>=V<sub>in</sub>, &nbsp; v<sub>L2</sub> = &#8722;v<sub>C1</sub>&#8722;V<sub>o</sub>, &nbsp; i<sub>C1</sub>=&#8722;I<sub>L2</sub>=&#8722;I<sub>o</sub>, &nbsp; i<sub>C2</sub>=I<sub>L2</sub>&#8722;I<sub>o</sub><br>
+<b>State 2</b> &mdash; S open (D&prime;T<sub>s</sub>): &nbsp; v<sub>L1</sub>=V<sub>in</sub>&#8722;v<sub>C1</sub>, &nbsp; v<sub>L2</sub>=&#8722;V<sub>o</sub>, &nbsp; i<sub>C1</sub>=I<sub>L1</sub>=I<sub>in</sub>, &nbsp; i<sub>C2</sub>=I<sub>L2</sub>&#8722;I<sub>o</sub>
+<br><br>
+Volt-sec (L&#8321;): V<sub>in</sub>&middot;D + (V<sub>in</sub>&#8722;V<sub>C1</sub>)(1&#8722;D) = 0 &nbsp;&rArr;&nbsp; V<sub>C1</sub> = V<sub>in</sub>/(1&#8722;D)  &hellip;(1)<br>
+Volt-sec (L&#8322;): (&#8722;V<sub>C1</sub>&#8722;V<sub>o</sub>)D + (&#8722;V<sub>o</sub>)(1&#8722;D) = 0 &nbsp;&rArr;&nbsp; V<sub>o</sub> = &#8722;V<sub>C1</sub>&middot;D &hellip;(2)<br>
+Sub (1) &rarr; (2): V<sub>o</sub> = &#8722;(V<sub>in</sub>/(1&#8722;D))&middot;D
+    </div>
+    <div class="eqbox">
+      <span class="result">V<sub>o</sub>/V<sub>in</sub> = &#8722;D/(1&#8722;D) &nbsp;&nbsp;&nbsp; I<sub>o</sub>/I<sub>in</sub> = (1&#8722;D)/D</span>
+      <span class="tag nl">non-linear, same gain shape as buck-boost</span>
+    </div>
+
+    <h3 class="sub">Linearity comparison</h3>
+    <table class="data">
+      <tr><th>Converter</th><th>A<sub>v</sub> vs D</th><th>Character</th></tr>
+      <tr><td>Buck</td><td>D</td><td><span class="tag lin">linear</span></td>
+      </tr>
+      <tr><td>Boost</td><td>1/(1&#8722;D)</td><td><span class="tag nl">non-linear</span></td></tr>
+      <tr><td>Buck-boost / &#262;uk</td><td>&plusmn;D/(1&#8722;D)</td><td><span class="tag nl">non-linear</span></td></tr>
+    </table>
+    <p>Non-linear converters make control-loop design harder. Sometimes engineers deliberately push a converter into <strong>DCM</strong> to force linear behaviour and simplify control &mdash; the next module explains why.</p>
+
+    <h3 class="sub">Sizing example (buck)</h3>
+    <div class="card">
+      <p style="margin:0"><strong>Specs:</strong> V<sub>in</sub>=15&nbsp;V, P<sub>out</sub>=10&nbsp;W, f<sub>sw</sub>=50&nbsp;kHz, &Delta;i<sub>L</sub>=10% of I<sub>L</sub>, D=0.4, &Delta;V<sub>o</sub>/V<sub>o</sub>&asymp;0.5%.<br>High switching frequency (&gt;10&nbsp;kHz) at low voltage points to a MOSFET switch; diode PIV and current rating are read off the datasheet against the design's peak current and reverse voltage.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 3 ================= -->
+  <section class="module" id="m3">
+    <div class="mheader"><span class="mnum">03</span><h2>Discontinuous Conduction Mode</h2><span class="mtag">DCM</span></div>
+
+    <p>As output/load current is reduced, the inductor current ripple stays the same size while its <em>average</em> shrinks &mdash; eventually the current tries to go negative. An uncontrolled unidirectional device (a diode) cannot carry reverse current, so i<sub>L</sub> clamps at zero until the next switching cycle begins. <strong>Not every converter can enter DCM</strong> &mdash; replacing the diode with a bidirectional switch (synchronous topology) removes DCM entirely.</p>
+
+    <div class="eqbox"><span class="result">DCM entry condition: &nbsp; &Delta;i<sub>L</sub>/2 &gt; I<sub>L</sub></span><span class="tag">peak-to-peak ripple exceeds twice the average current</span></div>
+
+    <h3 class="sub">Buck converter in DCM</h3>
+    <p>Three intervals per cycle instead of two:</p>
+    <table class="data">
+      <tr><th>Interval</th><th>Duration</th><th>v<sub>L</sub></th><th>State</th></tr>
+      <tr><td>1</td><td>DT<sub>s</sub></td><td>V<sub>in</sub>&#8722;V<sub>o</sub></td><td>S on, D off</td></tr>
+      <tr><td>2</td><td>D&#8321;&prime;T<sub>s</sub></td><td>&#8722;V<sub>o</sub></td><td>S off, D on (freewheeling)</td></tr>
+      <tr><td>3</td><td>D&#8322;&prime;T<sub>s</sub></td><td>0</td><td>both off, i<sub>L</sub>=0</td></tr>
+    </table>
+    <div class="deriv">
+V-sec: D(V<sub>in</sub>&#8722;V<sub>o</sub>) + D&#8321;&prime;(&#8722;V<sub>o</sub>) = 0 &nbsp;&rArr;&nbsp; V<sub>o</sub> = <span class="frac"><span class="num">D</span><span class="den">D+D&#8321;&prime;</span></span>V<sub>in</sub> &hellip;(1)  &nbsp;(D&#8321;&prime; unknown &mdash; found from when i<sub>L</sub> hits 0)<br><br>
+Peak i<sub>L</sub>: i<sub>pk</sub> = (V<sub>in</sub>&#8722;V<sub>o</sub>)DT<sub>s</sub>/L<br>
+I<sub>o</sub> = &lang;i<sub>L</sub>&rang; = area under i<sub>L</sub> curve &rArr; &lang;i<sub>L</sub>&rang;<sub>T<sub>s</sub></sub> = &#189;&middot;i<sub>pk</sub>&middot;(D+D&#8321;&prime;)<br>
+From (1): D+D&#8321;&prime; = DV<sub>in</sub>/V<sub>o</sub> &nbsp;&rArr;&nbsp; V<sub>o</sub>/R = &#189;&middot;[(V<sub>in</sub>&#8722;V<sub>o</sub>)D/L]&middot;DT<sub>s</sub>&middot;DV<sub>in</sub>/V<sub>o</sub>
+    </div>
+    <div class="eqbox">
+      <span class="result">V<sub>o</sub>/V<sub>in</sub> = <span class="frac"><span class="num">2</span><span class="den">1+&radic;(1+4K/D&sup2;)</span></span> &nbsp;&nbsp;&nbsp; K = 2L/(RT<sub>s</sub>)</span>
+      <span class="tag">DCM gain curve sits below the CCM straight line V<sub>o</sub>=DV<sub>in</sub>, and bends toward it as K&darr;</span>
+    </div>
+
+    <h3 class="sub">Buck-boost / &#262;uk in DCM &mdash; the CCM/DCM boundary</h3>
+    <p>Setting &lang;i<sub>D</sub>&rang;=I<sub>o</sub> exactly at the boundary of DCM gives:</p>
+    <div class="deriv">
+&#189;&middot;i<sub>pk</sub>&middot;(D&#8321;&prime;T<sub>s</sub>/T<sub>s</sub>) = V<sub>o</sub>/R, &nbsp; i<sub>pk</sub>=V<sub>o</sub>D&#8321;&prime;T<sub>s</sub>/L<br>
+&rArr; D&#8321;&prime;&sup2; = 2L/(RT<sub>s</sub>) = K &nbsp;&rArr;&nbsp; D&#8321;&prime; = &radic;K
+    </div>
+    <div class="eqbox"><span class="result">Voltage gain in DCM = D/&radic;K &nbsp;&nbsp;&nbsp;<span class="tag lin">linear in D</span></span></div>
+    <table class="data">
+      <tr><th>Mode</th><th>Gain V<sub>o</sub>/V<sub>in</sub></th><th>Character</th></tr>
+      <tr><td>CCM</td><td>D/(1&#8722;D)</td><td><span class="tag nl">non-linear</span></td></tr>
+      <tr><td>DCM</td><td>D/&radic;K</td><td><span class="tag lin">linear</span></td></tr>
+    </table>
+    <p>This is why a buck-boost is <em>sometimes deliberately operated in DCM</em>: it simplifies control-loop design by turning a non-linear plant into a linear one.</p>
+
+    <div class="eqbox">
+      <span class="result">Boundary condition (CCM &harr; DCM): &nbsp; D&prime;&sup2; = 2L/(RT<sub>s</sub>)</span>
+      <span class="tag">D&prime;&sup2; &gt; 2L/RT<sub>s</sub> &rarr; DCM &nbsp;&middot;&nbsp; D&prime;&sup2; &lt; 2L/RT<sub>s</sub> &rarr; CCM</span>
+    </div>
+    <p>T<sub>s</sub> and L are the two parameters the designer controls to stay in the desired mode.</p>
+
+    <div class="card assign">
+      <div class="lbl">Worked scenario from the notes</div>
+      <p style="margin:0">Buck-boost with V<sub>o</sub>=20&nbsp;V, P<sub>o</sub>=50&nbsp;W, V<sub>in</sub>=30&nbsp;V, f<sub>s</sub>=100&nbsp;kHz &mdash; find (a) the minimum inductor L for CCM&#8211;DCM boundary operation and (b) the maximum inductor current i<sub>pk</sub> under DCM.</p>
+    </div>
+
+    <h3 class="sub">Do 2nd-order converters satisfy the two balances in DCM?</h3>
+    <div class="card assign">
+      <p style="margin:0"><em>Assignment question from the notes:</em> justify whether second-order converter topologies satisfy charge-second balance and volt-second balance while operating under DCM.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 4 ================= -->
+  <section class="module" id="m4">
+    <div class="mheader"><span class="mnum">04</span><h2>Isolated Topologies</h2><span class="mtag">galvanic isolation</span></div>
+
+    <h3 class="sub">Why leave non-isolated converters behind?</h3>
+    <table class="data">
+      <tr><th>Disadvantage</th><th>Why it matters</th></tr>
+      <tr><td>Common ground</td><td>Input and output share a ground &mdash; no galvanic isolation. Disturbances on one side directly affect the other.</td></tr>
+      <tr><td>Extreme duty ratios</td><td>Theoretically 0&lt;D&lt;1, but practically D is restricted to 0.1&ndash;0.8. In boost converters, D&gt;0.8 causes output voltage to <em>drop</em> due to parasitic resistance, limiting wide-range regulation.</td></tr>
+      <tr><td>Single output only</td><td>No provision for multiple outputs.</td></tr>
+      <tr><td>Fixed polarity</td><td>Phase/polarity reversal is fixed and cannot easily be changed.</td></tr>
+    </table>
+    <div class="card note">
+      <div class="lbl">The fix &mdash; insert an isolation transformer</div>
+      <ol style="margin:6px 0 0">
+        <li>Enables separate ground references for primary &amp; secondary (galvanic isolation)</li>
+        <li>Turns ratio handles large step-up/down without extreme duty ratios</li>
+        <li>Secondary tappings can provide multiple output rails</li>
+        <li>Changing the transformer dot convention gives polarity flexibility freely</li>
+      </ol>
+    </div>
+
+    <h3 class="sub">Why a transformer can't just be dropped in</h3>
+    <p>An inductor's node switches between states almost like AC &mdash; attaching a transformer there seems natural, provided the dot convention keeps S and D turning on together. But testing volt-second balance on the magnetising inductance L<sub>M</sub> reveals the problem: while S is on, current ramps up (V<sub>in</sub>/L<sub>M</sub> slope); while S is off, <em>no reverse voltage is applied</em> &mdash; so i<sub>M</sub> only keeps climbing. L<sub>M</sub> saturates and blows up. A <strong>negative voltage during the off-time</strong> is required to reset the flux &mdash; this is what every isolated topology below provides, each in its own way.</p>
+
+    <h3 class="sub">Full-Bridge Buck Converter</h3>
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 400 160" width="400">
+          <rect x="30" y="30" width="90" height="90" rx="3" class="sv-ink" stroke-width="1.6" fill="none"/>
+          <text x="75" y="20" text-anchor="middle" class="sv-txt2">H&#8209;bridge (Q&#8321;&#8211;Q&#8324;)</text>
+          <line x1="140" y1="55" x2="180" y2="55" class="sv-ink" stroke-width="1.6"/>
+          <path d="M140 60 a20 30 0 0 1 0 60" class="sv-teal" stroke-width="1.6" fill="none"/>
+          <path d="M180 60 a20 30 0 0 0 0 60" class="sv-teal" stroke-width="1.6" fill="none"/>
+          <line x1="160" y1="55" x2="160" y2="125" class="sv-ink" stroke-width="1" stroke-dasharray="2 3"/>
+          <text x="160" y="145" text-anchor="middle" class="sv-txt">1:1</text>
+          <line x1="200" y1="60" x2="240" y2="60" class="sv-ink" stroke-width="1.6"/>
+          <line x1="200" y1="120" x2="240" y2="120" class="sv-ink" stroke-width="1.6"/>
+          <path d="M234 50 L252 50 L234 60 L252 60" class="sv-ink" stroke-width="1.6" fill="none"/>
+          <path d="M234 110 L252 110 L234 120 L252 120" class="sv-ink" stroke-width="1.6" fill="none"/>
+          <line x1="252" y1="55" x2="290" y2="55" class="sv-ink" stroke-width="1.6"/>
+          <path d="M290 55 q5 -12 10 0 q5 -12 10 0 q5 -12 10 0" class="sv-cu" stroke-width="1.8"/>
+          <line x1="320" y1="55" x2="360" y2="55" class="sv-ink" stroke-width="1.6"/>
+          <line x1="360" y1="55" x2="360" y2="120" class="sv-ink" stroke-width="1.6"/>
+          <line x1="351" y1="80" x2="369" y2="80" class="sv-ink" stroke-width="1.6"/>
+          <line x1="354" y1="86" x2="366" y2="86" class="sv-ink" stroke-width="1.6"/>
+          <line x1="252" y1="115" x2="360" y2="115" class="sv-ink" stroke-width="1.6" opacity="0"/>
+          <line x1="252" y1="90" x2="252" y2="120" class="sv-ink" stroke-width="1.6"/>
+          <line x1="252" y1="120" x2="360" y2="120" class="sv-ink" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <figcaption><b>Fig 4.1</b> &mdash; Full-bridge buck. Four switches drive the primary; two diodes rectify a centre-tapped secondary into the L-C output filter.</figcaption>
+    </figure>
+    <p>Three operating modes per half-cycle (the fourth repeats the second):</p>
+    <table class="data">
+      <tr><th>Mode</th><th>Devices on</th><th>i<sub>Lm</sub> behaviour</th></tr>
+      <tr><td>A</td><td>Q&#8321;,Q&#8323; + D&#8321;</td><td>Ramps up</td></tr>
+      <tr><td>B</td><td>All off, D&#8321;D&#8322; freewheel</td><td>Flat (off)</td></tr>
+      <tr><td>C</td><td>Q&#8322;,Q&#8324; + D&#8322;</td><td>Ramps down</td></tr>
+    </table>
+    <div class="eqbox"><span class="result">V<sub>o</sub>/V<sub>in</sub> = nD</span><span class="tag">D = fraction of the period either diagonal pair is on; D&prime; = all switches off</span></div>
+    <table class="data">
+      <tr><th>Advantage</th><th>Disadvantage</th></tr>
+      <tr><td>V<sub>o</sub> and V<sub>in</sub> have different grounds</td><td>Complex control logic; gate driver must keep intervals A and C exactly equal or the transformer saturates</td></tr>
+    </table>
+
+    <h3 class="sub">Half-Bridge Converter</h3>
+    <p>To counter the cost of four switches, split the input DC bus with two capacitors (each holding 0.5V<sub>in</sub>) and drive the transformer with just two complementary switches. <strong>Never let both switches be on together (shoot-through)</strong>.</p>
+    <div class="eqbox"><span class="result">V<sub>o</sub>/V<sub>in</sub> = 0.5&middot;n&middot;D &nbsp;&nbsp;(0.5D for 1:1)</span></div>
+    <p>Control is simpler (only two complementary switches) &mdash; typically used below &asymp;750&nbsp;W&ndash;1&nbsp;kW, lower power rating than full bridge.</p>
+
+    <h3 class="sub">Forward Converter</h3>
+    <p>Controller cost dominates converter cost, so the next step is to reduce switch count to <strong>one</strong>, at the cost of extra transformer windings (three: primary, secondary, tertiary/reset) and extra diodes.</p>
+    <div class="deriv">
+S&#8321; on: D&#8321;,D&#8323; off, (n&#8323;/n&#8321;)V<sub>in</sub> appears across the tertiary winding<br>
+S&#8321; off: D&#8322; off; D&#8321; turns on to reset flux in the magnetising circuit; D&#8323; conducts due to i<sub>L</sub> &rArr; &#8722;(n&#8321;/n&#8322;)V<sub>in</sub> appears across the winding<br><br>
+V-sec: D&middot;V<sub>in</sub> = D&#8322;&middot;V<sub>in</sub>(n&#8321;/n&#8322;) &nbsp;&rArr;&nbsp; D&#8322; = D&middot;n&#8322;/n&#8321;<br>
+D + D&#8322; + D&#8323; = 1, &nbsp; D&#8323; = 1 &#8722; D &#8722; D&middot;n&#8322;/n&#8321; &ge; 0
+    </div>
+    <div class="eqbox">
+      <span class="result">D &le; 1/(1+n&#8322;/n&#8321;) &nbsp;&nbsp;&rarr; with n&#8322;=n&#8321;: &nbsp; D<sub>max</sub> &le; 0.5</span>
+      <span class="tag">if D&gt;50%, the transformer saturates and inrush current flows &mdash; the defining limitation of the forward converter</span>
+    </div>
+
+    <h3 class="sub">Isolated Flyback Converter</h3>
+    <p>Start from the non-isolated buck-boost and split its single inductor into a coupled transformer winding set. The naive version leaves the switch <strong>floating</strong> (both terminals connected to power-carrying nodes) &mdash; the fix is to re-orient the winding so the switch has one terminal grounded, which makes the gate-driver design trivial.</p>
+    <div class="deriv">V-sec: D&middot;V<sub>in</sub> + D&prime;(&#8722;V<sub>o</sub>&middot;n&#8321;/n&#8322;) = 0</div>
+    <div class="eqbox"><span class="result">V<sub>o</sub>/V<sub>in</sub> = (D/D&prime;)&middot;(n&#8322;/n&#8321;)</span></div>
+    <table class="data">
+      <tr><th>Pros</th><th>Cons</th></tr>
+      <tr><td>Switch has one grounded terminal &rarr; very easy gate drive. Only one diode required &mdash; one of the most popular converter topologies.</td><td>Non-linear topology &mdash; designing its control loop is difficult.</td></tr>
+    </table>
+
+    <h3 class="sub">Isolated Boost &amp; Isolated &#262;uk</h3>
+    <p>An isolated boost places the H-bridge after the boost inductor, feeding either a <strong>centre-tapped</strong> secondary (simpler, but diode PIV rating doubles that of a full-bridge secondary &mdash; less cost-effective) or a <strong>full-bridge</strong> secondary (better diode utilisation, more switches).</p>
+    <div class="card assign">
+      <div class="lbl">Open question from the notes</div>
+      <p style="margin:0">The &#262;uk converter has two switch nodes where a transformer could be placed &mdash; which is better? Also: since the transfer capacitor connects input and output sides (transferring power between them), does it need to be split too, since the transformer sits at either the input or the output side? Develop the isolated &#262;uk topology for both placements and compare.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 5 ================= -->
+  <section class="module" id="m5">
+    <div class="mheader"><span class="mnum">05</span><h2>Dynamic (Small-Signal) Modelling</h2><span class="mtag">control design</span></div>
+
+    <p>Whether the converter uses a linear regulator or a switching regulator, a feedback loop is required to hold V<sub>o</sub> at V<sub>ref</sub>. Designing that loop requires knowing the converter's <em>dynamic</em> behaviour, not just its DC operating point.</p>
+
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 380 90" width="380">
+          <text x="10" y="40" class="sv-txt2">V<tspan baseline-shift="sub">ref</tspan></text>
+          <circle cx="45" cy="35" r="14" class="sv-ink" stroke-width="1.5"/>
+          <text x="45" y="40" text-anchor="middle" class="sv-txt">&Sigma;</text>
+          <line x1="59" y1="35" x2="100" y2="35" class="sv-ink" stroke-width="1.6"/>
+          <rect x="100" y="15" width="66" height="40" class="sv-ink" stroke-width="1.5" fill="none"/>
+          <text x="133" y="39" text-anchor="middle" class="sv-txt2">G(s)</text>
+          <line x1="166" y1="35" x2="200" y2="35" class="sv-ink" stroke-width="1.6"/>
+          <rect x="200" y="15" width="66" height="40" class="sv-ink" stroke-width="1.5" fill="none"/>
+          <text x="233" y="39" text-anchor="middle" class="sv-txt2">H(s)</text>
+          <line x1="266" y1="35" x2="330" y2="35" class="sv-ink" stroke-width="1.6"/>
+          <text x="345" y="40" class="sv-txt2">V<tspan baseline-shift="sub">o</tspan></text>
+          <line x1="300" y1="35" x2="300" y2="75" class="sv-ink" stroke-width="1.6"/>
+          <line x1="45" y1="75" x2="300" y2="75" class="sv-ink" stroke-width="1.6"/>
+          <line x1="45" y1="75" x2="45" y2="49" class="sv-ink" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <figcaption><b>Fig 5.1</b> &mdash; Closed loop. V<sub>o</sub>/V<sub>ref</sub> = G(s)H(s)/(1+G(s)H(s)). If G(s)H(s) &gg; 1, V<sub>o</sub>/V<sub>ref</sub> &asymp; 1 &mdash; so the <em>controller</em> transfer function must give high gain, since the <em>plant</em> transfer function is fixed.</figcaption>
+    </figure>
+    <p>A gate driver (GD) is always needed as the interface between the duty cycle <em>d</em> generated by the PWM and the switch &mdash; the PWM itself cannot drive the gate directly.</p>
+
+    <h3 class="sub">Perturbation and small-signal disturbance</h3>
+    <p>In small-signal modelling, a sinusoidal perturbation is added to a variable: d(t) = D + D&#770;<sub>m</sub>sin&omega;t. Perturbing D disturbs every other quantity &mdash; i<sub>L</sub>, v<sub>L</sub>, i<sub>c</sub>, I<sub>o</sub> &mdash; until the system re-settles. There are two classes of disturbance:</p>
+    <ul>
+      <li><strong>Small-signal disturbance</strong> &mdash; what the feedback loop is designed for.</li>
+      <li><strong>Large-signal disturbance</strong> &mdash; faults and other large transients, which feedback alone cannot control.</li>
+    </ul>
+    <div class="eqbox">
+      <span class="result">Control-to-output TF &nbsp; G<sub>c</sub>(s) = v&#770;<sub>o</sub>(s)/d&#770;(s) &nbsp;&#124;<sub>v&#770;<sub>in</sub>=0</sub></span>
+      <span class="tag">d is the control variable that moves V<sub>o</sub></span>
+    </div>
+
+    <h3 class="sub">Buck converter &mdash; full derivation</h3>
+    <div class="steps">
+      <li><strong>State equations per interval.</strong> DT<sub>s</sub>: v<sub>L</sub>=v<sub>in</sub>&#8722;v<sub>o</sub>, i<sub>c</sub>=i<sub>L</sub>&#8722;i<sub>o</sub>. D&prime;T<sub>s</sub>: v<sub>L</sub>=&#8722;v<sub>o</sub>, i<sub>c</sub>=i<sub>L</sub>&#8722;i<sub>o</sub>.</li>
+      <li><strong>Average over one switching period.</strong>
+        <div class="deriv">&lang;v<sub>L</sub>&rang;<sub>T<sub>s</sub></sub> = (v<sub>in</sub>&#8722;v<sub>o</sub>)d + (&#8722;v<sub>o</sub>)d&prime; = d&middot;v<sub>in</sub> &#8722; v<sub>o</sub><br>&there4; L d&lang;i<sub>L</sub>&rang;/dt = d&middot;v<sub>in</sub> &#8722; v<sub>o</sub>  &hellip;(1)<br><br>&lang;i<sub>c</sub>&rang;<sub>T<sub>s</sub></sub> = i<sub>L</sub>&#8722;i<sub>o</sub> &nbsp;&rArr;&nbsp; C dv<sub>c</sub>/dt = i<sub>L</sub> &#8722; v<sub>o</sub>/R  &hellip;(2)</div>
+      </li>
+      <li><strong>Perturb:</strong> d=D+d&#770;, v<sub>o</sub>=V<sub>o</sub>+v&#770;<sub>o</sub>, v<sub>in</sub>=V<sub>in</sub>+v&#770;<sub>in</sub>, i<sub>L</sub>=I<sub>L</sub>+&icirc;<sub>L</sub>.
+        <div class="deriv">From (1): L d&icirc;<sub>L</sub>/dt = D&middot;v&#770;<sub>in</sub> + d&#770;&middot;V<sub>in</sub> + d&#770;&middot;v&#770;<sub>in</sub> &#8722; v&#770;<sub>o</sub></div>
+      </li>
+      <li><strong>Linearise</strong> (drop 2nd-order small-signal terms, e.g. d&#770;&middot;v&#770;<sub>in</sub>):
+        <div class="deriv">L d&icirc;<sub>L</sub>/dt = D&middot;v&#770;<sub>in</sub> + d&#770;&middot;V<sub>in</sub> &#8722; v&#770;<sub>o</sub>  &hellip;(3)<br>C dv&#770;<sub>o</sub>/dt = &icirc;<sub>L</sub> &#8722; &icirc;<sub>o</sub>  &hellip;(4)</div>
+      </li>
+      <li><strong>Laplace transform</strong> (conventional method &mdash; the alternative is state-space averaging):
+        <div class="deriv">Ls&middot;&icirc;<sub>L</sub>(s) = D&middot;v&#770;<sub>in</sub>(s) + d&#770;V<sub>in</sub> &#8722; v&#770;<sub>o</sub>(s) &hellip;(6)<br>Cs&middot;v&#770;<sub>o</sub>(s) = &icirc;<sub>L</sub>(s) &#8722; v&#770;<sub>o</sub>(s)/R &nbsp;&rArr;&nbsp; &icirc;<sub>L</sub>(s) = Cs&middot;v&#770;<sub>o</sub>(s) + v&#770;<sub>o</sub>(s)/R &hellip;(7)</div>
+      </li>
+      <li><strong>Combine &amp; extract the transfer function</strong> (setting v&#770;<sub>in</sub>=0):
+        <div class="deriv">LCs&sup2;v&#770;<sub>o</sub>(s) + (LC/R)s&middot;v&#770;<sub>o</sub>(s) + v&#770;<sub>o</sub>(s) = d&#770;&middot;V<sub>in</sub></div>
+      </li>
+    </div>
+    <div class="eqbox">
+      <span class="result">v&#770;<sub>o</sub>(s)/d&#770;(s) &#124;<sub>v&#770;<sub>in</sub>=0</sub> = <span class="frac"><span class="num">V<sub>in</sub></span><span class="den">LCs&sup2; + (LC/R)s + 1</span></span></span>
+      <span class="tag">buck control-to-output transfer function &mdash; a 2nd-order low-pass response</span>
+    </div>
+    <p>Other transfer functions of interest from the same state equations: &icirc;<sub>L</sub>/d&#770; (at v&#770;<sub>in</sub>=0), and the <strong>audio susceptibility</strong> v&#770;<sub>o</sub>/v&#770;<sub>in</sub> (at d&#770;=0), and &icirc;<sub>L</sub>/v&#770;<sub>in</sub> (at d&#770;=0).</p>
+
+    <h3 class="sub">Boost converter</h3>
+    <p>Steps: (1) state equations &rarr; (2) average &rarr; (3) perturb the averaged equations &rarr; (4) Laplace transform &rarr; (5) extract the transfer function. Carried out the same way as the buck (do-it-yourself), the result is:</p>
+    <div class="eqbox">
+      <span class="result">v&#770;<sub>o</sub>(s)/&icirc;(s) = <span class="frac"><span class="num">R(1&#8722;d)&sup2; &#8722; sL</span><span class="den">s&sup2;RLC + sL + R(1&#8722;d)&sup2;</span></span></span>
+      <span class="tag">note the right-half-plane zero &mdash; a hallmark of boost-derived converters</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 6 ================= -->
+  <section class="module" id="m6">
+    <div class="mheader"><span class="mnum">06</span><h2>Compensator Design</h2><span class="mtag">error amplifier</span></div>
+    <p>A compensator shapes the loop gain to achieve suitable gain margin (GM) and phase margin (PM). Three standard types are used, in increasing order of complexity.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Type I &mdash; single pole at origin</div>
+        <div class="eqbox" style="margin:8px 0 0"><span class="result">G<sub>c</sub>(s) = k/s</span></div>
+        <p style="margin:8px 0 0">Op-amp integrator: input resistor R into the inverting input, feedback capacitor C.</p>
+        <div class="deriv">G<sub>c</sub> = V<sub>c</sub>/V<sub>o</sub> = 1/(sRC) = (1/&omega;RC) &ang;90&deg;</div>
+      </div>
+      <div class="card">
+        <div class="lbl">Type II &mdash; one pole at origin + one zero + one pole</div>
+        <div class="eqbox" style="margin:8px 0 0"><span class="result">G<sub>c2</sub>(s) = G<sub>M</sub><span class="frac"><span class="num">1+&omega;<sub>z</sub>/s</span><span class="den">1+s/&omega;<sub>p</sub></span></span></span></div>
+        <p style="margin:8px 0 0">G<sub>M</sub> = R&#8322;/R&#8321; is the mid-band gain. Bode magnitude: falls from a pole at origin, flattens between &omega;<sub>z</sub> and &omega;<sub>p</sub>, then falls again.</p>
+      </div>
+    </div>
+
+    <h4 class="sub2">Type III &mdash; two zeros, one pole at origin + two poles</h4>
+    <div class="eqbox"><span class="result">G<sub>c</sub>(s) = k <span class="frac"><span class="num">(1+s/&omega;<sub>z1</sub>)(1+s/&omega;<sub>z2</sub>)</span><span class="den">s(1+s/&omega;<sub>p1</sub>)(1+s/&omega;<sub>p2</sub>)</span></span></span></div>
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 420 140" width="420">
+          <polyline points="15,25 60,70 150,70 220,25 300,25 380,90" class="sv-cu" stroke-width="2" fill="none"/>
+          <line x1="15" y1="118" x2="400" y2="118" class="sv-ink" stroke-width="1"/>
+          <g class="sv-txt">
+            <text x="60" y="132">&omega;<tspan baseline-shift="sub">z1</tspan></text>
+            <text x="150" y="132">&omega;<tspan baseline-shift="sub">z2</tspan></text>
+            <text x="220" y="132">&omega;<tspan baseline-shift="sub">p2</tspan></text>
+            <text x="300" y="132">&omega;<tspan baseline-shift="sub">p3</tspan></text>
+            <text x="15" y="132">&omega;<tspan baseline-shift="sub">p1</tspan>=0</text>
+          </g>
+          <text x="380" y="20" class="sv-txt2">&omega; (log)</text>
+          <text x="5" y="20" class="sv-txt2">|V<tspan baseline-shift="sub">c</tspan>/V<tspan baseline-shift="sub">o</tspan>|</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig 6.1</b> &mdash; Type III bode magnitude: a "boost" region between two zeros and two poles gives phase lead exactly where it's needed near crossover.</figcaption>
+    </figure>
+    <p>Type II and III compensators are typically built into the switching-supply's error amplifier directly. The <strong>controller error amplifier</strong> block inside a real converter takes V<sub>o</sub> and V<sub>ref</sub> as inputs and outputs V<sub>c</sub>, which drives the PWM comparator against a ramp to set the duty cycle.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 7 ================= -->
+  <section class="module" id="m7">
+    <div class="mheader"><span class="mnum">07</span><h2>Frequency Response &amp; Stability</h2><span class="mtag">GM &middot; PM</span></div>
+
+    <p>Two numbers describe how close a closed-loop converter sits to instability: <strong>Gain Margin (GM)</strong> and <strong>Phase Margin (PM)</strong>.</p>
+
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 460 260" width="460">
+          <line x1="30" y1="60" x2="440" y2="60" class="sv-ink" stroke-width="1"/>
+          <polyline points="30,20 90,25 170,45 240,75 320,100 440,115" class="sv-cu" stroke-width="2" fill="none"/>
+          <line x1="240" y1="10" x2="240" y2="120" class="sv-ink" stroke-width="1" stroke-dasharray="2 3"/>
+          <line x1="320" y1="10" x2="320" y2="120" class="sv-ink" stroke-width="1" stroke-dasharray="2 3"/>
+          <text x="240" y="132" text-anchor="middle" class="sv-txt2">&omega;<tspan baseline-shift="sub">PM</tspan></text>
+          <text x="320" y="132" text-anchor="middle" class="sv-txt2">&omega;<tspan baseline-shift="sub">GM</tspan></text>
+          <path d="M320 100 L320 60" class="sv-teal" stroke-width="2"/>
+          <text x="330" y="80" class="sv-txt">Gain margin</text>
+          <text x="8" y="24" class="sv-txt">Loop Gain (dB)</text>
+
+          <line x1="30" y1="160" x2="440" y2="160" class="sv-ink" stroke-width="1"/>
+          <line x1="30" y1="230" x2="440" y2="230" class="sv-ink" stroke-width="1" stroke-dasharray="1 3"/>
+          <polyline points="30,150 90,160 170,185 240,205 320,220 440,232" class="sv-ink" stroke-width="2" fill="none"/>
+          <line x1="240" y1="145" x2="240" y2="250" class="sv-ink" stroke-width="1" stroke-dasharray="2 3"/>
+          <line x1="320" y1="145" x2="320" y2="250" class="sv-ink" stroke-width="1" stroke-dasharray="2 3"/>
+          <path d="M240 205 L240 230" class="sv-teal" stroke-width="2"/>
+          <text x="248" y="222" class="sv-txt">Phase margin</text>
+          <text x="8" y="154" class="sv-txt">Phase (deg)</text>
+          <text x="20" y="234" class="sv-txt">&#8722;180&deg;</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig 7.1</b> &mdash; &omega;<sub>PM</sub> is the <em>gain crossover frequency</em> (where |L(j&omega;)|=0&nbsp;dB); &omega;<sub>GM</sub> is the <em>phase crossover frequency</em> (where &ang;L(j&omega;)=&#8722;180&deg;).</figcaption>
+    </figure>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Gain margin procedure</div>
+        <ol style="margin:0">
+          <li>Find &omega;<sub>gm</sub> where loop phase = &#8722;180&deg; (the gain-margin frequency)</li>
+          <li>Determine the loop gain |L(j&omega;<sub>gm</sub>)| at that frequency</li>
+          <li>GM is the gain required to raise the magnitude curve back up to 0&nbsp;dB</li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="lbl">Phase margin procedure</div>
+        <ol style="margin:0">
+          <li>Find &omega;<sub>pm</sub> where loop gain = 0&nbsp;dB (the gain-crossover frequency)</li>
+          <li>PM is the difference between the loop phase at &omega;<sub>pm</sub> and &#8722;180&deg;</li>
+        </ol>
+      </div>
+    </div>
+    <div class="eqbox"><span class="result">GM &lt; 0 &rArr; unstable</span><span class="tag">a negative gain margin means a compensator must be (re)designed to fix it</span></div>
+
+    <h3 class="sub">Worked example</h3>
+    <p>A Type-3 system with:</p>
+    <div class="eqbox"><span class="result">L(j&omega;) = <span class="frac"><span class="num">1000</span><span class="den">(j&omega;+4)(j&omega;+8)(j&omega;+10)</span></span></span></div>
+
+    <h4 class="sub2">Phase margin</h4>
+    <div class="deriv">
+Set |L(j&omega;)| = 1: &nbsp; 1000 / [&radic;(&omega;&sup2;+16)&middot;&radic;(&omega;&sup2;+64)&middot;&radic;(&omega;&sup2;+100)] = 1<br>
+&rArr; &omega;<sub>pm</sub> = <b>6.79 rad/s</b> &nbsp;(gain crossover frequency)<br><br>
+&ang;L(j&omega;<sub>pm</sub>) = &#8722;tan&#8315;&sup1;(&omega;<sub>pm</sub>/4) &#8722; tan&#8315;&sup1;(&omega;<sub>pm</sub>/8) &#8722; tan&#8315;&sup1;(&omega;<sub>pm</sub>/10) = <b>&#8722;134&deg;</b><br>
+PM = 180&deg; + (&#8722;134&deg;)
+    </div>
+    <div class="eqbox"><span class="result">PM = 46&deg;</span><span class="tag">positive &rarr; stable</span></div>
+
+    <h4 class="sub2">Gain margin</h4>
+    <div class="deriv">
+Set &ang;L(j&omega;) = &#8722;180&deg;: &nbsp; &#8722;tan&#8315;&sup1;(&omega;/4) &#8722; tan&#8315;&sup1;(&omega;/8) &#8722; tan&#8315;&sup1;(&omega;/10) = &#8722;180&deg;<br>
+&rArr; &omega;<sub>gm</sub> = <b>12.33 rad/s</b> &nbsp;(phase crossover frequency)<br><br>
+|L(j&omega;<sub>gm</sub>)| = 1000 / [&radic;(&omega;<sub>gm</sub>&sup2;+16)&middot;&radic;(&omega;<sub>gm</sub>&sup2;+64)&middot;&radic;(&omega;<sub>gm</sub>&sup2;+100)] = 0.3307<br>
+GM = 1/|L(j&omega;<sub>gm</sub>)| = 3.024 &nbsp;&rArr;&nbsp; GM(dB) = &#8722;20&middot;log&#8321;&#8320;(0.3307)
+    </div>
+    <div class="eqbox"><span class="result">GM = 9.61 dB</span><span class="tag">stable</span></div>
+
+    <div class="card note">
+      <div class="lbl">Reading the plant into the loop</div>
+      <p style="margin:0">In a real converter, the loop is: V<sub>ref</sub> &rarr; error amplifier (compensator) &rarr; V<sub>c</sub> &rarr; PWM &rarr; d &rarr; switch &rarr; load &rarr; V<sub>o</sub>, fed back to the error amplifier's inverting input. GM and PM are evaluated on the <em>total</em> loop gain L(j&omega;) = (compensator)&times;(plant), which is why compensator design (Module 6) and frequency-response analysis are studied together.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 8 ================= -->
+  <section class="module" id="m8">
+    <div class="mheader"><span class="mnum">08</span><h2>Voltage vs Current Mode Control</h2><span class="mtag">Dr. Ankur &middot; 9 Sep</span></div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Voltage mode control</div>
+        <p style="margin:0">A single voltage-loop compensator compares V<sub>o</sub> to V<sub>ref</sub>, and its output V<sub>c</sub> is compared to a fixed ramp inside the PWM to set duty cycle d. Simple, single feedback loop.</p>
+      </div>
+      <div class="card">
+        <div class="lbl">Current mode control</div>
+        <p style="margin:0">Adds an <strong>inner current loop</strong> (sensing inductor current via K<sub>i</sub>) inside the <strong>outer voltage loop</strong> (sensing V<sub>o</sub> via K<sub>v</sub>). The current-loop compensator output is compared against the sensed current ramp; the voltage-loop compensator sets the current reference. Two compensators in cascade &mdash; current loop compensator (inner) and voltage loop compensator (outer).</p>
+      </div>
+    </div>
+
+    <h3 class="sub">Classification of current-mode control</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">A &middot; Fixed frequency</div>
+        <ol style="margin:0">
+          <li>Peak Current Mode Control (PCMC)</li>
+          <li>Valley Current Mode Control (VCMC)</li>
+          <li>Emulated Current Mode Control (ECMC)</li>
+          <li>Average Current Mode Control (ACMC)</li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="lbl">B &middot; Variable frequency</div>
+        <ol style="margin:0"><li>Hysteretic Current Mode Control (HCMC)</li></ol>
+      </div>
+    </div>
+
+    <h4 class="sub2">1 &middot; Peak Current Mode Control (PCMC)</h4>
+    <p>A fixed-frequency scheme. It senses the peak inductor current while the power switch is on, then uses it to <strong>turn the switch off</strong> once i<sub>L</sub> crosses the control/reference level.</p>
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 420 130" width="420">
+          <polyline points="10,90 60,30 60,70 110,20 110,70 160,15 160,70 210,10 210,70 260,15" class="sv-ink" stroke-width="1.8" fill="none"/>
+          <line x1="10" y1="60" x2="300" y2="52" class="sv-cu" stroke-width="1.6" stroke-dasharray="4 2"/>
+          <text x="305" y="55" class="sv-txt2">V<tspan baseline-shift="sub">com</tspan></text>
+          <text x="10" y="15" class="sv-txt2">i<tspan baseline-shift="sub">L</tspan> (peak turns switch off)</text>
+          <line x1="10" y1="115" x2="300" y2="115" class="sv-ink" stroke-width="1"/>
+          <text x="10" y="128" class="sv-txt">PWM gate pulses aligned to each peak crossing</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig 8.1</b> &mdash; PCMC: the switch turns off exactly when the sensed peak current meets V<sub>com</sub>.</figcaption>
+    </figure>
+
+    <h4 class="sub2">2 &middot; Valley Current Mode Control (VCMC)</h4>
+    <p>Senses the <em>valley</em> inductor current while the switch is off, and uses it to <strong>turn the switch on</strong>.</p>
+    <table class="data">
+      <tr><th>Trait</th><th>Note</th></tr>
+      <tr><td>Subharmonic oscillation</td><td>Occurs at duty cycle <strong>&lt; 50%</strong></td></tr>
+      <tr><td>Response</td><td>Slower response to sudden input-voltage changes</td></tr>
+    </table>
+
+    <h4 class="sub2">3 &middot; Emulated Current Mode Control (ECMC)</h4>
+    <p>Combines VCMC's ability to operate at very low duty cycles with PCMC's quick response to sudden line/load changes. ECMC samples the <em>valley</em> inductor current, then uses it to <strong>emulate</strong> the inductor current's up-slope; this emulated current provides the peak-current information needed to turn the switch off.</p>
+    <div class="card warn">
+      <div class="lbl">Caveat</div>
+      <p style="margin:0">ECMC suffers from sub-harmonic oscillation at duty cycles <strong>&gt; 50%</strong>, requiring a compensation ramp with a slope greater than half the sum of the inductor's up-slope and down-slope to damp it. It also has a minimum on-time limit due to the delay needed to properly sense the peak current.</p>
+    </div>
+
+    <h4 class="sub2">4 &middot; Average Current Mode Control (ACMC)</h4>
+    <ul>
+      <li>Good dynamic response</li>
+      <li>Easy to implement</li>
+    </ul>
+    <p>Instead of reacting to a single instantaneous sample, the compensator tracks the average inductor current continuously.</p>
+
+    <h4 class="sub2">B &middot; Hysteretic Current Mode Control (HCMC)</h4>
+    <ul>
+      <li>Senses <em>both</em> the valley and the peak inductor current, using them to turn the switch on <em>and</em> off</li>
+      <li>Does not suffer from sub-harmonic oscillation or minimum/maximum duty-cycle limitations</li>
+      <li>Variable switching frequency (unlike the four fixed-frequency schemes above)</li>
+    </ul>
+
+    <table class="data">
+      <caption>Current-mode control scheme comparison</caption>
+      <tr><th>Scheme</th><th>Frequency</th><th>Senses</th><th>Weak point</th></tr>
+      <tr><td>Peak (PCMC)</td><td>Fixed</td><td>Peak, switch-on</td><td>Needs slope compensation above 50% D</td></tr>
+      <tr><td>Valley (VCMC)</td><td>Fixed</td><td>Valley, switch-off</td><td>Subharmonic below 50% D; slow line response</td></tr>
+      <tr><td>Emulated (ECMC)</td><td>Fixed</td><td>Valley &rarr; emulate peak</td><td>Subharmonic above 50% D; min on-time</td></tr>
+      <tr><td>Average (ACMC)</td><td>Fixed</td><td>Average current</td><td>&mdash; (good dynamics, easy)</td></tr>
+      <tr><td>Hysteretic (HCMC)</td><td>Variable</td><td>Peak &amp; valley</td><td>Variable f complicates filter design</td></tr>
+    </table>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 9 ================= -->
+  <section class="module" id="m9">
+    <div class="mheader"><span class="mnum">09</span><h2>Power Quality Fundamentals</h2><span class="mtag">Unit 3</span></div>
+
+    <div class="eqbox"><span class="result">Power Quality: the degree to which voltage, frequency, and waveform of the electrical power supply conform to established specifications.</span></div>
+
+    <h3 class="sub">Key characteristics</h3>
+    <ul>
+      <li>Voltage magnitude &amp; stability</li>
+      <li>Frequency stability</li>
+      <li>Waveform purity (low distortion)</li>
+      <li>Phase balance in 3&phi; systems</li>
+      <li>Continuity of supply</li>
+    </ul>
+
+    <h3 class="sub">Why power quality matters</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Economic impact</div>
+        <ul style="margin:0"><li>Equipment damage &amp; failure</li><li>Production downtime</li><li>Energy inefficiency</li><li>Maintenance cost</li></ul>
+      </div>
+      <div class="card">
+        <div class="lbl">Technical impact</div>
+        <ul style="margin:0"><li>Malfunction of sensitive equipment</li><li>Data corruption</li><li>Reduced equipment lifespan</li><li>System instability</li></ul>
+      </div>
+    </div>
+    <p><strong>Growing importance today</strong> due to: proliferation of sensitive electronic equipment, integration of renewable energy sources, growth of EVs and charging infrastructure, smart grid development, industrial automation and digitalisation. <strong>Key sectors affected:</strong> data centres, hospitals, manufacturing, telecommunications, financial services.</p>
+
+    <h3 class="sub">Classification of PQ disturbances</h3>
+    <table class="data">
+      <tr><th>Category</th><th>Duration</th><th>Magnitude</th></tr>
+      <tr><td>Transients</td><td>&lt; 0.5 cycles</td><td>&mdash;</td></tr>
+      <tr><td>Short duration</td><td>0.5 cycles &ndash; 1 min</td><td>&mdash;</td></tr>
+      <tr><td>Long duration</td><td>&gt; 1 min</td><td>&mdash;</td></tr>
+      <tr><td>Voltage imbalance</td><td>Steady state</td><td>&mdash;</td></tr>
+      <tr><td>Waveform distortion</td><td>Steady state</td><td>&mdash;</td></tr>
+      <tr><td>Frequency variations</td><td>&lt; 10 s</td><td>&plusmn;1 Hz</td></tr>
+    </table>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Voltage Sag (Dip)</div>
+        <p>Temporary reduction in RMS voltage magnitude between 0.1 and 0.9&nbsp;pu, lasting 0.5 cycles to 1&nbsp;minute.</p>
+        <p><strong>Common causes:</strong> system faults (70&ndash;80% of sags), large motor starting, transformer energisation, heavy load switching.<br>
+        <strong>Effects:</strong> contactors/relays dropping out, VSD tripping, computer &amp; PLC resets, lighting flicker.</p>
+      </div>
+      <div class="card">
+        <div class="lbl">Voltage Swell</div>
+        <p>Reciprocal of sag &mdash; temporary increase in RMS voltage above 1.1&nbsp;pu, lasting 0.5 cycles to 1&nbsp;minute.</p>
+        <p><strong>Common causes:</strong> sudden load reduction, single-line-to-ground faults, capacitor switching, voltage-regulator malfunction.<br>
+        <strong>Effects:</strong> insulation stress &amp; breakdown, electronic component damage, premature equipment aging, motor overheating.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">Harmonics &mdash; the fundamentals</h3>
+    <p>Sinusoidal voltages or currents having frequencies that are integer multiples of the fundamental frequency.</p>
+    <div class="eqbox"><span class="result">i(t) = I&#8321;&middot;sin(&omega;t+&phi;&#8321;) + &sum;<sub>h=2</sub><sup>&infin;</sup> I<sub>h</sub>&middot;sin(h&omega;t+&phi;<sub>h</sub>)</span><span class="tag">h = harmonic order &middot; I<sub>h</sub> = h-th harmonic amplitude</span></div>
+
+    <h4 class="sub2">Common harmonic orders</h4>
+    <ul>
+      <li><strong>Odd harmonics</strong> &mdash; 3rd, 5th, 7th, 11th, 13th &hellip; (most significant)</li>
+      <li><strong>Even harmonics</strong> &mdash; generally small in balanced systems</li>
+      <li><strong>Triplen harmonics</strong> &mdash; 3rd, 9th, 15th &hellip; (zero-sequence) &mdash; magnitude and angles are the same</li>
+    </ul>
+
+    <h4 class="sub2">Sources of harmonics</h4>
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Non-linear loads</div>
+        <ul style="margin:0"><li>SMPS</li><li>VFD (variable frequency drives)</li><li>Rectifiers &amp; converters</li><li>Arc furnaces</li><li>Welding equipment</li></ul>
+      </div>
+      <div class="card">
+        <div class="lbl">Power electronic devices</div>
+        <ul style="margin:0"><li>Inverters</li><li>UPS systems</li><li>Battery chargers</li><li>LED drivers</li><li>Solar inverters</li><li>EV chargers</li></ul>
+      </div>
+    </div>
+    <p><strong>Key point:</strong> modern electronic equipment is both a <em>source</em> and a <em>victim</em> of harmonics.</p>
+
+    <h4 class="sub2">IEEE 519 limits</h4>
+    <ul>
+      <li>Voltage THD: &lt; 5% at PCC (point of common coupling)</li>
+      <li>Current THD: varies with I<sub>sc</sub>/I<sub>L</sub> ratio</li>
+      <li>Individual harmonic: &lt; 3% of the fundamental</li>
+    </ul>
+
+    <h4 class="sub2">Effects of harmonics</h4>
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">On electrical equipment</div>
+        <ul style="margin:0"><li>Transformer overheating</li><li>Motor torque pulsations &amp; heating</li><li>Cable heating (skin effect)</li><li>Capacitor overloading</li><li>Neutral conductor overloading</li></ul>
+      </div>
+      <div class="card">
+        <div class="lbl">On the power system</div>
+        <ul style="margin:0"><li>Increased losses &amp; reduced efficiency</li><li>Resonance conditions</li><li>Interference with communication systems</li></ul>
+      </div>
+    </div>
+
+    <h4 class="sub2">Mitigation strategy overview</h4>
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Passive solutions</div>
+        <ul style="margin:0"><li>LC filters</li><li>K-rated transformers</li><li>Phase-shifting transformers</li><li>Isolation transformers</li></ul>
+      </div>
+      <div class="card">
+        <div class="lbl">Active solutions</div>
+        <ul style="margin:0"><li>Active power filters</li><li>Dynamic voltage restorers</li><li>Static VAR compensators</li><li>UPS systems</li><li>Power conditioners</li></ul>
+      </div>
+    </div>
+    <h4 class="sub2">Voltage regulation solutions (sags/swells)</h4>
+    <ul>
+      <li><strong>DVR</strong> &mdash; Dynamic Voltage Restorer</li>
+      <li><strong>UPS</strong> &mdash; Uninterruptible Power Supply</li>
+      <li><strong>Voltage regulators</strong> &mdash; tap-changing transformers</li>
+      <li><strong>STATCOM</strong> &mdash; Static Synchronous Compensator</li>
+    </ul>
+    <h4 class="sub2">Modern monitoring technologies</h4>
+    <p>Real-time data logging, remote monitoring via IoT, predictive analytics, automated reporting, integration with SCADA. Data analysis includes trend analysis and event correlation.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 10 ================= -->
+  <section class="module" id="m10">
+    <div class="mheader"><span class="mnum">10</span><h2>THD, Power Factor &amp; PFC</h2><span class="mtag">Unit 2/3</span></div>
+
+    <h3 class="sub">Distortion metrics</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Total Harmonic Distortion (THD)</div>
+        <p style="margin:0">Ratio of the RMS value of the waveform <em>not including the fundamental</em>, to the fundamental.</p>
+        <div class="deriv">THD<sub>V</sub> = &radic;(&sum;<sub>h=2</sub><sup>&infin;</sup> V<sub>h</sub>&sup2;) / V&#8321; &times;100%<br>THD<sub>I</sub> = &radic;(&sum;<sub>h=2</sub><sup>&infin;</sup> I<sub>h</sub>&sup2;) / I&#8321; &times;100%</div>
+      </div>
+      <div class="card">
+        <div class="lbl">Total Demand Distortion (TDD)</div>
+        <p style="margin:0">Like THD<sub>I</sub>, but normalised to the <strong>maximum demand load current</strong> I<sub>L</sub> instead of the fundamental &mdash; avoids overstating distortion at light load.</p>
+        <div class="deriv">TDD = &radic;(&sum;<sub>h=2</sub><sup>&infin;</sup> I<sub>h</sub>&sup2;) / I<sub>L</sub> &times;100%</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="lbl">Individual Harmonic Distortion (IHD)</div>
+      <div class="deriv">IHD<sub>h</sub> = (I<sub>h</sub>/I&#8321;) &times;100%</div>
+    </div>
+    <p><strong>Measurement equipment:</strong> power quality analysers, spectrum analysers, oscilloscopes with FFT, digital multimeters (true RMS), harmonic analysers.</p>
+
+    <h3 class="sub">Power factor</h3>
+    <div class="eqbox"><span class="result">PF = P/S = cos&phi;</span><span class="tag">P = real power (W) &middot; S = apparent power (VA) = V<sub>rms</sub>&times;I<sub>rms</sub> &middot; &phi; = phase angle between V and I</span></div>
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 260 140" width="260">
+          <line x1="30" y1="120" x2="200" y2="120" class="sv-ink" stroke-width="1.8"/>
+          <line x1="200" y1="120" x2="200" y2="30" class="sv-ink" stroke-width="1.8"/>
+          <line x1="30" y1="120" x2="200" y2="30" class="sv-cu" stroke-width="1.8"/>
+          <text x="105" y="135" text-anchor="middle" class="sv-txt2">P (real)</text>
+          <text x="212" y="75" class="sv-txt2">Q (reactive)</text>
+          <text x="105" y="65" text-anchor="middle" class="sv-txt2">S (apparent)</text>
+          <path d="M52 120 A22 22 0 0 0 42 103" class="sv-ink" stroke-width="1.2" fill="none"/>
+          <text x="55" y="107" class="sv-txt">&phi;</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig 10.1</b> &mdash; Power triangle: S&sup2; = P&sup2; + Q&sup2;. P=VIcos&phi; (W), Q=VIsin&phi; (VAR), S=VI (VA).</figcaption>
+    </figure>
+    <table class="data">
+      <tr><th>PF</th><th>Category</th><th>Load type</th><th>Current</th></tr>
+      <tr><td>PF = 1</td><td>Unity</td><td>Resistive</td><td>In phase with V</td></tr>
+      <tr><td>PF &lt; 1 (lag)</td><td>Inductive</td><td>Motors, transformers</td><td>Lags voltage</td></tr>
+      <tr><td>PF &lt; 1 (lead)</td><td>Capacitive</td><td>Capacitor banks</td><td>Leads voltage</td></tr>
+    </table>
+    <div class="card warn">
+      <div class="lbl">Why low PF matters</div>
+      <p style="margin:0">Low PF means higher current for the same real power &mdash; leading to increased I&sup2;R losses and reduced system efficiency.</p>
+      <div class="deriv" style="margin:10px 0 0">10 kW load, V=220V: &nbsp; PF=0.5 &rArr; I = 10000/(220&times;0.5) = <b>87 A</b> &nbsp;&middot;&nbsp; PF=0.9 &rArr; I = 10000/(220&times;0.9) = <b>48 A</b><br>Current reduction: <b>45%</b></div>
+    </div>
+
+    <h3 class="sub">Power factor correction (PFC)</h3>
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 460 150" width="460">
+          <rect x="180" y="10" width="100" height="34" rx="3" class="sv-ink" stroke-width="1.6"/>
+          <text x="230" y="32" text-anchor="middle" class="sv-txt2">PFC Methods</text>
+          <line x1="230" y1="44" x2="230" y2="58" class="sv-ink" stroke-width="1.4"/>
+          <line x1="90" y1="58" x2="370" y2="58" class="sv-ink" stroke-width="1.4"/>
+          <line x1="90" y1="58" x2="90" y2="72" class="sv-ink" stroke-width="1.4"/>
+          <line x1="370" y1="58" x2="370" y2="72" class="sv-ink" stroke-width="1.4"/>
+          <rect x="30" y="72" width="120" height="30" rx="3" class="sv-cu" stroke-width="1.6"/>
+          <text x="90" y="91" text-anchor="middle" class="sv-txt2">Passive PFC</text>
+          <rect x="310" y="72" width="120" height="30" rx="3" class="sv-cu" stroke-width="1.6"/>
+          <text x="370" y="91" text-anchor="middle" class="sv-txt2">Active PFC</text>
+          <line x1="90" y1="102" x2="90" y2="112" class="sv-ink" stroke-width="1.2"/>
+          <line x1="370" y1="102" x2="370" y2="112" class="sv-ink" stroke-width="1.2"/>
+          <line x1="55" y1="112" x2="125" y2="112" class="sv-ink" stroke-width="1.2"/>
+          <line x1="335" y1="112" x2="405" y2="112" class="sv-ink" stroke-width="1.2"/>
+          <line x1="55" y1="112" x2="55" y2="122" class="sv-ink" stroke-width="1.2"/>
+          <line x1="125" y1="112" x2="125" y2="122" class="sv-ink" stroke-width="1.2"/>
+          <line x1="335" y1="112" x2="335" y2="122" class="sv-ink" stroke-width="1.2"/>
+          <line x1="405" y1="112" x2="405" y2="122" class="sv-ink" stroke-width="1.2"/>
+          <g font-family="IBM Plex Mono, monospace" font-size="10.5" text-anchor="middle" fill="var(--ink-soft)">
+            <text x="55" y="136">Fixed cap.</text>
+            <text x="125" y="136">Automatic cap.</text>
+            <text x="335" y="136">Boost conv.</text>
+            <text x="405" y="136">Buck-boost conv.</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption><b>Fig 10.2</b> &mdash; Classification of PFC methods.</figcaption>
+    </figure>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="lbl">Passive PFC &mdash; fixed shunt capacitor</div>
+        <p>A capacitor in parallel with the (inductive) load provides leading current that compensates the lagging inductive current, reducing net reactive power.</p>
+        <div class="deriv">Q<sub>c</sub> = P(tan&phi;&#8321; &#8722; tan&phi;&#8322;)<br>C = Q<sub>c</sub> / (2&pi;fV&sup2;)</div>
+        <p style="margin:0">&phi;&#8321; = initial angle, &phi;&#8322; = desired angle.</p>
+      </div>
+      <div class="card">
+        <div class="lbl">Automatic PFC</div>
+        <p style="margin:0">A PF controller/relay senses V/I via sensors and current transformers, computes PF, and switches a capacitor bank in/out through a microcontroller-driven relay system to track load changes.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">Active PFC &mdash; the boost converter</h3>
+    <figure class="fig">
+      <div class="stage">
+        <svg viewBox="0 0 440 170" width="440">
+          <circle cx="40" cy="90" r="18" class="sv-ink" stroke-width="1.6"/>
+          <path d="M28 90 q6 -10 12 0 q6 10 12 0" class="sv-cu" stroke-width="1.6" fill="none"/>
+          <text x="40" y="60" text-anchor="middle" class="sv-txt">AC input</text>
+          <line x1="58" y1="80" x2="90" y2="45" class="sv-ink" stroke-width="1.4"/>
+          <line x1="58" y1="100" x2="90" y2="135" class="sv-ink" stroke-width="1.4"/>
+          <rect x="90" y="35" width="70" height="110" class="sv-ink" stroke-width="1.4" fill="none" rx="3"/>
+          <text x="125" y="95" text-anchor="middle" class="sv-txt2">Diode<tspan x="125" dy="14">bridge</tspan></text>
+          <line x1="160" y1="45" x2="200" y2="45" class="sv-ink" stroke-width="1.6"/>
+          <path d="M200 45 q6 -12 12 0 q6 -12 12 0 q6 -12 12 0" class="sv-cu" stroke-width="1.8"/>
+          <line x1="236" y1="45" x2="270" y2="45" class="sv-ink" stroke-width="1.6"/>
+          <path d="M262 35 L280 35 L262 45 L280 45" class="sv-ink" stroke-width="1.6" fill="none"/>
+          <line x1="230" y1="45" x2="230" y2="95" class="sv-ink" stroke-width="1.6"/>
+          <circle cx="230" cy="100" r="3.4" class="sv-ink" stroke-width="1.4"/>
+          <line x1="270" y1="45" x2="330" y2="45" class="sv-ink" stroke-width="1.6"/>
+          <line x1="330" y1="45" x2="330" y2="145" class="sv-ink" stroke-width="1.6"/>
+          <line x1="321" y1="80" x2="339" y2="80" class="sv-ink" stroke-width="1.6"/>
+          <line x1="324" y1="86" x2="336" y2="86" class="sv-ink" stroke-width="1.6"/>
+          <text x="345" y="60" class="sv-txt">DC output</text>
+          <line x1="160" y1="135" x2="330" y2="135" class="sv-ink" stroke-width="1.6"/>
+          <line x1="230" y1="103" x2="230" y2="135" class="sv-ink" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <figcaption><b>Fig 10.3</b> &mdash; Boost converter as PFC front-end: switch S controls inductor current, high-frequency switching (20&ndash;100&nbsp;kHz) forces the input current to follow the input voltage waveform (unity PF), with feedback maintaining output regulation.</figcaption>
+    </figure>
+    <ul>
+      <li>Switch S controls inductor current</li>
+      <li>Current shaping forces i<sub>in</sub> to follow the AC voltage waveform</li>
+      <li>High-frequency switching (20&ndash;100&nbsp;kHz), f<sub>sw</sub> &gg; f<sub>line</sub></li>
+      <li>Feedback control maintains the DC output</li>
+    </ul>
+    <p>The boost stage's switching waveforms show V<sub>L</sub>=|V<sub>s</sub>|=V<sub>d</sub> while S is on (i<sub>L</sub> ramps up), and V<sub>L</sub>=|V<sub>s</sub>|&#8722;V<sub>o</sub> while S is off (i<sub>L</sub> ramps down with negative slope near the line peak) &mdash; the envelope of the switching-frequency triangle wave tracks the rectified sine, giving a near-sinusoidal averaged input current.</p>
+
+    <h4 class="sub2">Active PFC control methods</h4>
+    <table class="data">
+      <tr><th>Method</th><th>Traits</th></tr>
+      <tr><td>Average current mode control</td><td>Current loop shapes input current; voltage loop regulates output; good dynamic response</td></tr>
+      <tr><td>Peak current mode control</td><td>Simpler implementation; faster transient response; may require slope compensation</td></tr>
+      <tr><td>Hysteresis control</td><td>Variable-frequency operation; simple analog implementation; good current tracking</td></tr>
+      <tr><td>Digital control</td><td>Microcontroller/DSP-based; advanced algorithms</td></tr>
+    </table>
+
+    <h4 class="sub2">Power factor vs. displacement power factor</h4>
+    <ul>
+      <li><strong>DPF</strong> (Displacement Power Factor) = cos&phi;&#8321;, where &phi;&#8321; is the <em>fundamental</em> phase angle</li>
+      <li><strong>True power factor</strong> includes harmonic effects: PF = P<sub>total</sub>/(V<sub>rms</sub>I<sub>rms</sub>)</li>
+    </ul>
+    <div class="eqbox"><span class="result">PF = DPF &times; 1/&radic;(1+THD<sub>I</sub>&sup2;)</span></div>
+    <div class="card">
+      <div class="lbl">Example</div>
+      <p style="margin:0">A load with DPF=0.95 and THD<sub>I</sub>=30%:<br>PF = 0.95 &times; 1/&radic;(1+0.3&sup2;) = 0.95&times;0.958 = <strong>0.91</strong></p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= MODULE 11 ================= -->
+  <section class="module" id="m11">
+    <div class="mheader"><span class="mnum">&#8734;</span><h2>Syllabus Map</h2><span class="mtag">full picture</span></div>
+    <p>How every module in this reference fits back into the course structure:</p>
+    <table class="data">
+      <tr><th>Block</th><th>Modules here</th></tr>
+      <tr><td>1 &middot; Switch-mode power supplies &amp; control</td><td>Fundamentals of SMPS (01)</td></tr>
+      <tr><td>2 &middot; Non-isolated converters</td><td>Buck, Boost, Buck-Boost, &#262;uk &mdash; CCM (02) &amp; DCM (03)</td></tr>
+      <tr><td>3 &middot; Isolated converters</td><td>Flyback, Forward, Push-Pull/Full-Bridge, Half-Bridge (04)</td></tr>
+      <tr><td>4 &middot; Dynamic modelling &amp; control design</td><td>State-space averaging, small-signal model, control-to-output TF (05); compensator types (06); GM/PM (07); current-mode control (08)</td></tr>
+      <tr><td>5 &middot; Power quality</td><td>PQ fundamentals, harmonics, sag/swell (09); THD, TDD, PF, PFC (10)</td></tr>
+    </table>
+    <div class="card note">
+      <div class="lbl">How to use this module</div>
+      <p style="margin:0">Modules 02&ndash;04 build the converter's <em>steady-state</em> behaviour; modules 05&ndash;08 build its <em>dynamic</em> behaviour and the control loop wrapped around it; modules 09&ndash;10 shift to the <em>grid-facing</em> side of the same converters &mdash; how they load the AC line and how that's cleaned up. Read top to bottom for a first pass, or jump in from the sidebar for revision.</p>
+    </div>
+  </section>
+
+  </div>
+</main>
+</div>
+<a href="#m0" class="topbtn" aria-label="Back to top">&#8593;</a>
+</body>
+</html>
